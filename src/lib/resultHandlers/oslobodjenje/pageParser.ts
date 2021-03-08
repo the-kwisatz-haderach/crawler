@@ -1,8 +1,9 @@
+import nameFormatter from '../../../utils/nameFormatter'
 import { createObituary } from '../../models/obituary'
 import type { Obituary } from '../../models/obituary/types'
 import type { InputProcessor } from '../../types'
 
-const handler: InputProcessor<Obituary[]> = async (page) => {
+const pageParser: InputProcessor<Obituary[]> = async (page) => {
   const items = await page.$$('.obituaryItem')
 
   const obituaries: Obituary[] = []
@@ -12,7 +13,7 @@ const handler: InputProcessor<Obituary[]> = async (page) => {
     const name: string = await personPhoto
       ?.$('h2')
       .then((handle) => handle?.evaluate((el) => el.innerText))
-    const names = name.replace(/[()]/g, '').split(/\s+/)
+    const names = name.replace(/[()]/g, '').split(/\s+/).map(nameFormatter)
 
     const description: string = await item
       ?.$('.maintext')
@@ -49,4 +50,4 @@ const handler: InputProcessor<Obituary[]> = async (page) => {
   return obituaries
 }
 
-export default handler
+export default pageParser

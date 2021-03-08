@@ -1,9 +1,9 @@
-import handler from './handler'
+import handler from './pageParser'
 import readStub from '../helpers/readStub'
 import obituaries from '../__stubs__/oslobodjenje'
 import { Page } from 'puppeteer'
 
-describe('Handler', () => {
+describe('pageParser', () => {
   let page: Page | null
 
   afterAll(async () => {
@@ -13,7 +13,7 @@ describe('Handler', () => {
     page = null
   })
 
-  it('parses', async () => {
+  it('parses a page', async () => {
     page = await readStub('oslobodjenje')
 
     const actual = await handler(page)
