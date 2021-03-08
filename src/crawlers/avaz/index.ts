@@ -7,7 +7,7 @@ import type { ObituaryMap } from '../../lib/types'
 const CRON_WEEKLY = '0 0 0 * * 0'
 
 export default new SiteCrawler<ObituaryMap>({
-  url: process.env.OSLOBODJENJE_URL as string,
+  url: process.env.AVAZ_URL as string,
   errorHandler,
   outputHandler,
   documentProcessor,

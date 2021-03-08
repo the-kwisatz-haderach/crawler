@@ -3,11 +3,7 @@ import fs from 'fs'
 import { ObituaryOutputHandler } from '../../../lib/types'
 
 const outputWriter: ObituaryOutputHandler = (obituaries) => {
-  const outputPath = path.resolve(
-    process.cwd(),
-    'crawl-results',
-    'oslobodjenje.json'
-  )
+  const outputPath = path.resolve(process.cwd(), 'crawl-results', 'avaz.json')
   fs.writeFile(outputPath, JSON.stringify(obituaries), (err) => {
     if (err) {
       throw err
