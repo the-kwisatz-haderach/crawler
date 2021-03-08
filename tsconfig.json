@@ -1,0 +1,15 @@
+{
+  "extends": "@tsconfig/node14/tsconfig.json",
+  "compilerOptions": {
+    "module": "CommonJS",
+    "noImplicitAny": true,
+    "moduleResolution": "Node",
+    "removeComments": true,
+    "strict": true,
+    "preserveConstEnums": true,
+    "sourceMap": true,
+    "outDir": "build"
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "**/*.spec.ts", "**/*.test.ts"]
+}
