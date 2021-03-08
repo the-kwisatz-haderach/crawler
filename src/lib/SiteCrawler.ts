@@ -1,29 +1,38 @@
 import puppeteer from 'puppeteer'
-import type { Scheduler, OutputHandler, InputProcessor } from './types'
+import type {
+  ErrorHandler,
+  Scheduler,
+  OutputHandler,
+  PageProcessor
+} from './types'
 
 type SiteCrawlerArgs<U> = {
   url: string
   crawlScheduler?: Scheduler
-  documentProcessor: InputProcessor<U>
-  resultHandler: OutputHandler<U>
+  documentProcessor: PageProcessor<U>
+  outputHandler: OutputHandler<U>
+  errorHandler: ErrorHandler
 }
 
 export default class SiteCrawler<U> {
   private readonly url: string
   private crawlScheduler?: Scheduler
-  private documentProcessor: InputProcessor<U>
-  private resultHandler: OutputHandler<U>
+  private documentProcessor: PageProcessor<U>
+  private outputHandler: OutputHandler<U>
+  private errorHandler: ErrorHandler
 
   constructor({
     url,
     documentProcessor,
-    resultHandler,
-    crawlScheduler
+    outputHandler,
+    crawlScheduler,
+    errorHandler
   }: SiteCrawlerArgs<U>) {
     this.url = url
     this.documentProcessor = documentProcessor
-    this.resultHandler = resultHandler
+    this.outputHandler = outputHandler
     this.crawlScheduler = crawlScheduler
+    this.errorHandler = errorHandler
   }
 
   scheduleCrawl() {
@@ -41,10 +50,10 @@ export default class SiteCrawler<U> {
       await page.goto(this.url, {
         waitUntil: 'domcontentloaded'
       })
-      await this.documentProcessor(page).then(this.resultHandler)
+      await this.documentProcessor(page).then(this.outputHandler)
       await browser.close()
     } catch (err) {
-      console.error(err)
+      this.errorHandler(err)
     }
   }
 }

@@ -1,6 +1,6 @@
-import handler from './pageParser'
-import readStub from '../helpers/readStub'
-import obituaries from '../__stubs__/oslobodjenje'
+import handler from './pageProcessor'
+import readStub from '../../helpers/readStub'
+import obituaries from '../../__stubs__/oslobodjenje'
 import { Page } from 'puppeteer'
 
 describe('pageParser', () => {

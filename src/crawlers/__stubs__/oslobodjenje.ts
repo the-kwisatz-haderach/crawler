@@ -1,5 +1,5 @@
-import { createObituary } from '../../models/obituary'
-import { Obituary } from '../../models/obituary/types'
+import { createObituary } from '../../lib/models/obituary'
+import { Obituary } from '../../lib/models/obituary/types'
 
 const expected: Obituary[] = [
   createObituary({

@@ -1,9 +1,9 @@
 import nameFormatter from '../../../utils/nameFormatter'
-import { createObituary } from '../../models/obituary'
-import type { Obituary } from '../../models/obituary/types'
-import type { InputProcessor } from '../../types'
+import { createObituary } from '../../../lib/models/obituary'
+import type { Obituary } from '../../../lib/models/obituary/types'
+import type { PageProcessor } from '../../../lib/types'
 
-const pageParser: InputProcessor<Obituary[]> = async (page) => {
+const pageProcessor: PageProcessor<Obituary[]> = async (page) => {
   const items = await page.$$('.obituaryItem')
 
   const obituaries: Obituary[] = []
@@ -50,4 +50,4 @@ const pageParser: InputProcessor<Obituary[]> = async (page) => {
   return obituaries
 }
 
-export default pageParser
+export default pageProcessor

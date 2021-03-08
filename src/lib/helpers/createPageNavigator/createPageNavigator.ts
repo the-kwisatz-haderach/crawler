@@ -1,9 +1,9 @@
-import { ElementHandle, Page } from 'puppeteer'
+import { NextPageNavigatorFactory } from '../../types'
 
-const createPageNavigator = (
-  nextPageLinkSelector: (page: Page) => Promise<ElementHandle<any> | null>
+const createPageNavigator: NextPageNavigatorFactory = (
+  nextPageLinkSelector
 ) => {
-  return async (page: Page): Promise<{ success: boolean }> => {
+  return async (page) => {
     try {
       const element = await nextPageLinkSelector(page)
       await Promise.all([page.waitForNavigation(), element?.click()])
