@@ -7,7 +7,7 @@ import {
   ObituaryOutputHandler,
   Scheduler
 } from '../../lib/types'
-import { obituaryIdGenerator } from '../../lib/helpers/obituaryIdGenerator'
+import obituaryIdGenerator from '../../lib/helpers/obituaryIdGenerator/obituaryIdGenerator'
 
 export const errorHandler: ErrorHandler = (err) => console.error(err)
 

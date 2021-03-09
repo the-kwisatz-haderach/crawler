@@ -1,1 +1,4 @@
-export { default as createPageNavigator } from './createPageNavigator'
+export {
+  createPageNavigator,
+  createDetailPageNavigator
+} from './createPageNavigator'

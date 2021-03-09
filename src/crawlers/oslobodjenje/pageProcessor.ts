@@ -4,17 +4,19 @@ import type { Obituary } from '../../lib/models/obituary/types'
 import type { PageProcessor } from '../../lib/types'
 
 const pageProcessor: PageProcessor<Obituary[]> = async (page) => {
+  const obituaries: Obituary[] = []
   try {
     const items = await page.$$('.obituaryItem')
-
-    const obituaries: Obituary[] = []
 
     for (const item of items) {
       const personPhoto = await item.$('div.personPhoto')
       const name: string = await personPhoto
         ?.$('h2')
         .then((handle) => handle?.evaluate((el) => el.innerText))
-      const names = name.replace(/[()]/g, '').split(/\s+/).map(nameFormatter)
+      const names = (name ?? '')
+        .replace(/[()]/g, '')
+        .split(/\s+/)
+        .map(nameFormatter)
 
       const description: string = await item
         ?.$('.maintext')
@@ -52,9 +54,8 @@ const pageProcessor: PageProcessor<Obituary[]> = async (page) => {
 
     return obituaries
   } catch (err) {
-    await page.close()
     console.error(err)
-    return []
+    return obituaries
   }
 }
 

@@ -1,13 +1,21 @@
 import SiteCrawler from '../../lib/SiteCrawler'
-import { errorHandler, createScheduler } from '../common'
-import type { ObituaryMap } from '../../lib/types'
+import { errorHandler, createScheduler, createOutputWriter } from '../common'
+import pageProcessor from './pageProcessor'
+import { nextPageNavigator, detailPageNavigator } from './pageNavigator'
+import { createSiteProcessor } from '../../lib/helpers/createSiteProcessor'
+import { Obituary } from '../../lib/models/obituary/types'
 
-const CRON_WEEKLY = '0 0 0 * * 0'
+const siteProcessor = createSiteProcessor(
+  pageProcessor,
+  nextPageNavigator,
+  (_, page) => page >= 30,
+  detailPageNavigator
+)
 
-export default new SiteCrawler<ObituaryMap>({
+export default new SiteCrawler<Obituary[]>({
   url: process.env.AVAZ_URL as string,
   errorHandler,
-  outputHandler: console.log,
-  documentProcessor: async () => ({}),
-  crawlScheduler: createScheduler(CRON_WEEKLY)
+  outputHandler: createOutputWriter('avaz'),
+  documentProcessor: siteProcessor,
+  crawlScheduler: createScheduler(process.env.CRON_SCHEDULE as string)
 })

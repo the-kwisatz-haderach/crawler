@@ -1,1 +1,4 @@
-import crawler from './crawlers/oslobodjenje'
+import oslobodjenjeCrawler from './crawlers/oslobodjenje'
+import avazCrawler from './crawlers/avaz'
+
+avazCrawler.scheduleCrawl()

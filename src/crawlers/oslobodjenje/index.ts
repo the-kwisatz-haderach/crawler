@@ -11,12 +11,10 @@ const siteProcessor = createSiteProcessor(
   (result) => result.length >= 30
 )
 
-const CRON_WEEKLY = '0 0 0 * * 0'
-
 export default new SiteCrawler<Obituary[]>({
   url: process.env.OSLOBODJENJE_URL as string,
   errorHandler,
   outputHandler: createOutputWriter('oslobodjenje'),
   documentProcessor: siteProcessor,
-  crawlScheduler: createScheduler(CRON_WEEKLY)
+  crawlScheduler: createScheduler(process.env.CRON_SCHEDULE as string)
 })

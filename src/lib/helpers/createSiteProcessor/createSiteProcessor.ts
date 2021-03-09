@@ -15,25 +15,35 @@ const createSiteProcessor: SiteProcessorFactory = (
       !stopCondition(allResults, pageIndex) && pageIndex <= MAX_PAGES;
       pageIndex += 1
     ) {
-      if (detailedListingNavigator) {
-        const { success } = await detailedListingNavigator(page)
+      if (!detailedListingNavigator) {
+        const results = await pageProcessor(page)
+        allResults.push(...results)
+        const { success } = await nextListingNavigator(page)
         if (!success) {
           break
+        } else {
+          continue
         }
       }
 
-      const results = await pageProcessor(page)
+      const { success, isLastElement } = await detailedListingNavigator(page)
 
-      allResults.push(...results)
-
-      if (detailedListingNavigator) {
+      if (success) {
+        const results = await pageProcessor(page)
+        allResults.push(...results)
         await page.goBack()
+        pageIndex -= 1
+        continue
       }
 
-      const { success } = await nextListingNavigator(page)
-      if (!success) {
-        break
+      if (isLastElement) {
+        const { success } = await nextListingNavigator(page)
+        if (success) {
+          continue
+        }
       }
+
+      break
     }
   } catch (err) {
     console.error(err)
