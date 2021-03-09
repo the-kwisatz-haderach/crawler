@@ -1,5 +1,5 @@
 module.exports = {
-  preset: 'jest-puppeteer',
+  // preset: 'jest-puppeteer',
   roots: ['<rootDir>/src'],
   testMatch: [
     '**/__tests__/**/*.+(ts|tsx|js)',

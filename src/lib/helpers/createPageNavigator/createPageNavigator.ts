@@ -1,11 +1,9 @@
-import { NextPageNavigatorFactory } from '../../types'
+import { PageNavigatorFactory } from '../../types'
 
-const createPageNavigator: NextPageNavigatorFactory = (
-  nextPageLinkSelector
-) => {
+const createPageNavigator: PageNavigatorFactory = (pageNavigator) => {
   return async (page) => {
     try {
-      const element = await nextPageLinkSelector(page)
+      const element = await pageNavigator(page)
       await Promise.all([page.waitForNavigation(), element?.click()])
       return { success: true }
     } catch (err) {

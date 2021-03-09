@@ -44,16 +44,19 @@ export default class SiteCrawler<U> {
   }
 
   private async crawl(): Promise<void> {
+    const browser = await puppeteer.launch({
+      headless: (process.env.PUPPETEER_HEADLESS as string) === 'true'
+    })
     try {
-      const browser = await puppeteer.launch()
       const page = await browser.newPage()
       await page.goto(this.url, {
         waitUntil: 'domcontentloaded'
       })
       await this.documentProcessor(page).then(this.outputHandler)
-      await browser.close()
     } catch (err) {
       this.errorHandler(err)
+    } finally {
+      await browser.close()
     }
   }
 }
