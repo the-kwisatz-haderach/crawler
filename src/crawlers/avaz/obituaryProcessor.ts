@@ -13,7 +13,6 @@ const getNames = (root: ElementHandle) =>
 
 const obituaryProcessor = createItemProcessor<HTMLDivElement, Obituary>(
   obituaryDefaults,
-  '.obituary',
   {
     firstname: (root) =>
       getNames(root)
@@ -28,13 +27,15 @@ const obituaryProcessor = createItemProcessor<HTMLDivElement, Obituary>(
         .then((names) => (names.length > 2 ? names[1] : ''))
         .then(nameFormatter),
     dateOfDeath: (root) => root.$('.obituary-footer').then(getInnerText('p')),
-    description: (root) =>
-      root.$$('p').then((handle) =>
+    description: async (root) => {
+      const handle = await root.$$('p')
+      const text = await Promise.all(
         handle
-          ?.slice(-3, -1)
+          .slice(-3, -1)
           .map((handle) => handle.evaluate((el) => el.innerText))
-          .join('\n')
-      ),
+      )
+      return text.join('\n')
+    },
     imgUrl: getElementProperty('img', 'src')
   }
 )

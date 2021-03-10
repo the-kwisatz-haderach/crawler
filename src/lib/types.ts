@@ -31,11 +31,10 @@ export type ItemProcessorFactory = <
   T extends Record<string, unknown> = {}
 >(
   itemDefaults: T,
-  rootSelector: string,
   propertyProcessors: {
     [K in keyof T]?: (handle: ElementHandle<E>) => Promise<T[K] | undefined>
   }
-) => (page: Page) => Promise<T | null>
+) => (rootItem: ElementHandle<E> | null) => Promise<T | null>
 
 export type ObituaryMap = Record<string, Obituary>
 export type ObituaryPageProcessor = PageProcessor<Obituary[]>

@@ -1,5 +1,5 @@
 const nameFormatter = (name: string): string => {
-  const updated = name.replace(/([,.]|\d|\s)+/g, '').toLowerCase()
+  const updated = name.replace(/([,.()]|\d|\s)+/g, '').toLowerCase()
   if (!updated) {
     return ''
   }

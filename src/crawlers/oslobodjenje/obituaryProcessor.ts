@@ -20,7 +20,6 @@ const getDates = (root: ElementHandle<HTMLDivElement>) =>
 
 const obituaryProcessor = createItemProcessor<HTMLDivElement, Obituary>(
   obituaryDefaults,
-  '.obituaryItem',
   {
     firstname: (root) =>
       getNames(root)

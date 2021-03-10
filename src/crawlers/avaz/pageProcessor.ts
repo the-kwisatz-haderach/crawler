@@ -5,7 +5,7 @@ import obituaryProcessor from './obituaryProcessor'
 const pageProcessor: PageProcessor<Obituary[]> = async (page) => {
   const obituaries: Obituary[] = []
   try {
-    const obituary = await obituaryProcessor(page)
+    const obituary = await obituaryProcessor(await page.$('.obituary'))
 
     if (obituary) {
       obituaries.push(obituary)
