@@ -1,20 +1,8 @@
-import { CronJob } from 'cron'
 import path from 'path'
 import fs from 'fs'
-import {
-  ErrorHandler,
-  ObituaryMap,
-  ObituaryOutputHandler,
-  Scheduler
-} from '../../lib/types'
+import { ObituaryMap, ObituaryOutputHandler } from '../../lib/types'
 import obituaryIdGenerator from '../../lib/helpers/obituaryIdGenerator/obituaryIdGenerator'
 import { createObituary } from '../../lib/models/obituary'
-
-export const errorHandler: ErrorHandler = (err) => console.error(err)
-
-export const createScheduler = (cronPattern: string): Scheduler => (crawl) => {
-  new CronJob(cronPattern, crawl, null, false).start()
-}
 
 export const createOutputWriter = (fileName: string): ObituaryOutputHandler => (
   obituaries

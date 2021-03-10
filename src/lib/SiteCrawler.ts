@@ -1,22 +1,18 @@
+import { CronJob } from 'cron'
 import puppeteer from 'puppeteer'
-import type {
-  ErrorHandler,
-  Scheduler,
-  OutputHandler,
-  PageProcessor
-} from './types'
+import type { ErrorHandler, OutputHandler, PageProcessor } from './types'
 
 type SiteCrawlerArgs<U> = {
   url: string
-  crawlScheduler?: Scheduler
   documentProcessor: PageProcessor<U>
-  outputHandler: OutputHandler<U>
-  errorHandler: ErrorHandler
+  cronSchedule?: string | Date
+  outputHandler?: OutputHandler<U>
+  errorHandler?: ErrorHandler
 }
 
 export default class SiteCrawler<U> {
   private readonly url: string
-  private crawlScheduler?: Scheduler
+  private readonly cronSchedule?: string | Date
   private documentProcessor: PageProcessor<U>
   private outputHandler: OutputHandler<U>
   private errorHandler: ErrorHandler
@@ -25,19 +21,19 @@ export default class SiteCrawler<U> {
     url,
     documentProcessor,
     outputHandler,
-    crawlScheduler,
+    cronSchedule,
     errorHandler
   }: SiteCrawlerArgs<U>) {
     this.url = url
     this.documentProcessor = documentProcessor
-    this.outputHandler = outputHandler
-    this.crawlScheduler = crawlScheduler
-    this.errorHandler = errorHandler
+    this.cronSchedule = cronSchedule
+    this.outputHandler = outputHandler ?? console.log
+    this.errorHandler = errorHandler ?? console.error
   }
 
-  scheduleCrawl() {
-    if (this.crawlScheduler) {
-      this.crawlScheduler(this.crawl)
+  init(): void {
+    if (this.cronSchedule) {
+      new CronJob(this.cronSchedule, this.crawl, null, false).start()
     } else {
       this.crawl()
     }
@@ -45,7 +41,8 @@ export default class SiteCrawler<U> {
 
   private async crawl(): Promise<void> {
     const browser = await puppeteer.launch({
-      headless: (process.env.PUPPETEER_HEADLESS as string) === 'true'
+      headless: (process.env.PUPPETEER_HEADLESS as string) === 'true',
+      slowMo: process.env.PUPPETEER_SLOW_MO === 'true' ? 150 : undefined
     })
     try {
       const page = await browser.newPage()

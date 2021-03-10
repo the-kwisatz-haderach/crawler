@@ -1,7 +1,6 @@
 import type { ElementHandle, Page } from 'puppeteer'
 import { Obituary } from './models/obituary/types'
 
-export type Scheduler = (cb: () => void) => void
 export type PageProcessor<T> = (input: Page) => Promise<T>
 export type OutputHandler<T> = (crawlOutput: T) => void
 export type ErrorHandler<T extends Error = Error> = (error: T) => void
