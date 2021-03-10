@@ -16,6 +16,6 @@ export default new SiteCrawler<Obituary[]>({
   url: process.env.AVAZ_URL as string,
   errorHandler,
   outputHandler: createOutputWriter('avaz'),
-  documentProcessor: siteProcessor,
-  crawlScheduler: createScheduler(process.env.CRON_SCHEDULE as string)
+  documentProcessor: siteProcessor
+  // crawlScheduler: createScheduler(process.env.CRON_SCHEDULE as string)
 })

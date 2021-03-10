@@ -27,6 +27,17 @@ export type SiteProcessorFactory = <T extends Record<string, unknown>>(
   detailedListingNavigator?: Navigator
 ) => PageProcessor<T[]>
 
+export type ItemProcessorFactory = <
+  E extends Element = any,
+  T extends Record<string, unknown> = {}
+>(
+  itemDefaults: T,
+  rootSelector: string,
+  propertyProcessors: {
+    [K in keyof T]?: (handle: ElementHandle<E>) => Promise<T[K] | undefined>
+  }
+) => (page: Page) => Promise<T | null>
+
 export type ObituaryMap = Record<string, Obituary>
 export type ObituaryPageProcessor = PageProcessor<Obituary[]>
 export type ObituaryOutputHandler = OutputHandler<Obituary[]>

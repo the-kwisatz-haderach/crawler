@@ -8,6 +8,7 @@ import {
   Scheduler
 } from '../../lib/types'
 import obituaryIdGenerator from '../../lib/helpers/obituaryIdGenerator/obituaryIdGenerator'
+import { createObituary } from '../../lib/models/obituary'
 
 export const errorHandler: ErrorHandler = (err) => console.error(err)
 
@@ -37,3 +38,10 @@ export const createOutputWriter = (fileName: string): ObituaryOutputHandler => (
     }
   })
 }
+
+export const obituaryDefaults = createObituary({
+  firstname: '',
+  surname: '',
+  dateOfBirth: null,
+  dateOfDeath: null
+})
