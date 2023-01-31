@@ -2,7 +2,7 @@ import { ElementHandle } from 'puppeteer'
 import { createItemProcessor } from '../../lib/helpers/createItemProcessor'
 import { getElementProperty } from '../../lib/helpers/getElementProperty'
 import { getInnerText } from '../../lib/helpers/getInnerText'
-import { Obituary } from '../../lib/models/obituary/types'
+import { IObituary } from '../../lib/models/obituary/types'
 import nameFormatter from '../../utils/nameFormatter'
 import { obituaryDefaults } from '../common'
 
@@ -11,7 +11,7 @@ const getNames = (root: ElementHandle) =>
     fullName.split(/\s+/)
   )
 
-const obituaryProcessor = createItemProcessor<HTMLDivElement, Obituary>(
+const obituaryProcessor = createItemProcessor<HTMLDivElement, IObituary>(
   obituaryDefaults,
   {
     firstname: (root) =>

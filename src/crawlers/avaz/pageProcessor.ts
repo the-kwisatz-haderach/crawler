@@ -1,9 +1,9 @@
-import type { Obituary } from '../../lib/models/obituary/types'
+import type { IObituary } from '../../lib/models/obituary/types'
 import type { PageProcessor } from '../../lib/types'
 import obituaryProcessor from './obituaryProcessor'
 
-const pageProcessor: PageProcessor<Obituary[]> = async (page) => {
-  const obituaries: Obituary[] = []
+const pageProcessor: PageProcessor<IObituary[]> = async (page) => {
+  const obituaries: IObituary[] = []
   try {
     const obituary = await obituaryProcessor(await page.$('.obituary'))
 

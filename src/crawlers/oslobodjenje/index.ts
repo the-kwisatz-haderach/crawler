@@ -1,19 +1,18 @@
 import SiteCrawler from '../../lib/SiteCrawler'
-import { createOutputWriter } from '../common'
+import { saveToDb } from '../common'
 import { createSiteProcessor } from '../../lib/helpers/createSiteProcessor'
 import { nextPageNavigator } from './pageNavigator'
 import pageProcessor from './pageProcessor'
-import { Obituary } from '../../lib/models/obituary/types'
+import { IObituary } from '../../lib/models/obituary/types'
 
 const siteProcessor = createSiteProcessor(
   pageProcessor,
   nextPageNavigator,
-  (result) => result.length >= 10
+  (_, pageIndex) => pageIndex >= 1
 )
 
-export default new SiteCrawler<Obituary[]>({
+export default new SiteCrawler<IObituary[]>({
   url: process.env.OSLOBODJENJE_URL as string,
-  outputHandler: createOutputWriter('oslobodjenje'),
+  outputHandler: saveToDb,
   documentProcessor: siteProcessor
-  // cronSchedule: process.env.CRON_SCHEDULE as string
 })

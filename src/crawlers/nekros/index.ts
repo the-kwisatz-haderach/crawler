@@ -1,19 +1,18 @@
 import SiteCrawler from '../../lib/SiteCrawler'
 import { saveToDb } from '../common'
-import pageProcessor from './pageProcessor'
-import { nextPageNavigator, detailPageNavigator } from './pageNavigator'
 import { createSiteProcessor } from '../../lib/helpers/createSiteProcessor'
+import { nextPageNavigator } from './pageNavigator'
+import pageProcessor from './pageProcessor'
 import { IObituary } from '../../lib/models/obituary/types'
 
 const siteProcessor = createSiteProcessor(
   pageProcessor,
   nextPageNavigator,
-  (_, page) => page >= 1,
-  detailPageNavigator
+  (result) => result.length >= 1
 )
 
 export default new SiteCrawler<IObituary[]>({
-  url: process.env.AVAZ_URL as string,
+  url: process.env.NEKROS_URL as string,
   outputHandler: saveToDb,
   documentProcessor: siteProcessor
 })

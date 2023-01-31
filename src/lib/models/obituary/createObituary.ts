@@ -1,15 +1,17 @@
-import { Obituary, ObituaryInput, ObituaryType } from './types'
+import { IObituary, IObituaryInput } from './types'
 
-export default function createObituary(input: ObituaryInput): Obituary {
+export default function createObituary(input: IObituaryInput): IObituary {
   return {
+    date_created: new Date().toISOString(),
     firstname: input.firstname,
     surname: input.surname,
-    dateOfBirth: input.dateOfBirth,
-    dateOfDeath: input.dateOfDeath,
-    imgUrl: input.imgUrl ?? '',
-    type: input.type ?? ObituaryType.OBITUARY,
-    description: input.description ?? '',
-    middlename: input.middlename ?? '',
-    relative: input.relative ?? ''
+    date_of_birth: input.date_of_birth,
+    date_of_death: input.date_of_death,
+    image: input.image || '',
+    type: input.type || 'obituary',
+    middlename: input.middlename || '',
+    relative: input.relative || '',
+    long_text: input.long_text || '',
+    is_crawled: true
   }
 }

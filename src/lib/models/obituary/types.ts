@@ -1,24 +1,40 @@
-import { Optional } from '../../../utility-types'
+export type ObituaryType =
+  | 'in-memoriam'
+  | 'obituary'
+  | 'gratitude-display'
+  | 'last-greetings'
 
-export enum ObituaryType {
-  IN_MEMORIAM = 'IN_MEMORIAM',
-  OBITUARY = 'OBITUARY',
-  GRATITUDE_DISPLAY = 'GRATITUDE_DISPLAY'
-}
+export type FaithType = 'christian' | 'muslim'
 
-export type Obituary = {
+export interface IObituary extends Record<string, any> {
   firstname: string
-  middlename: string
   surname: string
-  dateOfBirth: string | null
-  dateOfDeath: string | null
-  imgUrl: string
+  middlename?: string
+  date_of_birth: string
+  date_of_death: string
+  image?: string
   type: ObituaryType
-  description: string
-  relative: string
+  long_text?: string
+  relative?: string
+  city?: string
+  size?: 'regular' | 'large'
+  additional_information?: string
+  preamble?: string
+  date_created: string
+  date_updated?: string
+  faith?: FaithType
+  is_crawled: boolean
 }
 
-export type ObituaryInput = Optional<
-  Obituary,
-  'description' | 'imgUrl' | 'type' | 'relative' | 'middlename'
->
+export interface IObituaryInput {
+  firstname: string
+  middlename?: string
+  surname: string
+  date_of_birth: string
+  date_of_death: string
+  relative?: string
+  long_text?: string
+  image?: string
+  type?: ObituaryType
+  faith?: FaithType
+}
