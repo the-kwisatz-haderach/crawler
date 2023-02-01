@@ -26,30 +26,25 @@ export default class SiteCrawler<U> {
     this.errorHandler = errorHandler ?? console.error
   }
 
-  async init(): Promise<void> {
-    await this.crawl().catch(console.error)
-  }
-
   setOutputHandler(outputHandler: OutputHandler<U>): void {
     this.outputHandler = outputHandler
   }
 
-  private async crawl(): Promise<void> {
+  async crawl(): Promise<void> {
     if (this.outputHandler) {
-      const browser = await puppeteer.launch({
-        headless: true
-      })
       try {
+        const browser = await puppeteer.launch({
+          headless: true
+        })
         const page = await browser.newPage()
         page.setDefaultNavigationTimeout(90000)
         await page.goto(this.url, {
           waitUntil: 'domcontentloaded'
         })
         await this.documentProcessor(page).then(this.outputHandler)
+        await browser.close()
       } catch (err) {
         this.errorHandler(err as Error)
-      } finally {
-        await browser.close()
       }
     }
   }

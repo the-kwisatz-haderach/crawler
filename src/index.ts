@@ -9,7 +9,7 @@ new SiteCrawler({
   url: 'https://www.oslobodjenje.ba/smrtovnice',
   documentProcessor: oslobodjenjeProcessor,
   outputHandler: saveToDb('oslobodjenje')
-}).init()
+}).crawl()
 
 // new SiteCrawler({
 //   url: 'https://digital.avaz.ba/smrtovnice',
