@@ -1,11 +1,11 @@
 import path from 'path'
 import fs from 'fs'
-import { ObituaryMap, ObituaryOutputHandler } from '../../lib/types'
-import obituaryIdGenerator from '../../lib/helpers/obituaryIdGenerator/obituaryIdGenerator'
+import { ObituaryMap, ObituaryOutputHandler } from '../../types'
+import { obituaryIdGenerator } from '../../helpers/obituaryIdGenerator'
 
 export const createOutputWriter =
   (fileName: string): ObituaryOutputHandler =>
-  (obituaries) => {
+  async (obituaries) => {
     const data = obituaries.reduce<ObituaryMap>(
       (acc, curr) => ({
         ...acc,

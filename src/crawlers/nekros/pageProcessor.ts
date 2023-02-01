@@ -1,5 +1,5 @@
-import type { IObituary } from '../../lib/models/obituary/types'
-import type { PageProcessor } from '../../lib/types'
+import { IObituary } from '../../domain/types'
+import type { PageProcessor } from '../../types'
 import obituaryProcessor from './obituaryProcessor'
 
 const pageProcessor: PageProcessor<IObituary[]> = async (page) => {

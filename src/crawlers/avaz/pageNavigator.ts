@@ -1,7 +1,7 @@
 import {
   createPageNavigator,
-  createDetailPageNavigator
-} from '../../lib/helpers/createPageNavigator'
+  createDetailPageNavigator,
+} from '../../helpers/createPageNavigator'
 
 export const nextPageNavigator = createPageNavigator(async (page) => {
   const paginationList = await page.$('ul.pagination')

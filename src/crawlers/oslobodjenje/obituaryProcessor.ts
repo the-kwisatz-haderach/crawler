@@ -1,43 +1,55 @@
 import { ElementHandle } from 'puppeteer'
-import { createItemProcessor } from '../../lib/helpers/createItemProcessor'
-import { getElementProperty } from '../../lib/helpers/getElementProperty'
-import { getInnerText } from '../../lib/helpers/getInnerText'
-import { IObituary } from '../../lib/models/obituary/types'
+import { IObituary } from '../../domain/types'
+import { createItemProcessor } from '../../helpers/createItemProcessor'
+import { getElementProperty } from '../../helpers/getElementProperty'
+import { getInnerText } from '../../helpers/getInnerText'
 import nameFormatter from '../../utils/nameFormatter'
-import { obituaryDefaults } from '../common'
+import { createObituaryDefaults } from '../../domain/obituary/createObituaryDefaults'
 
-const getNames = (root: ElementHandle<HTMLDivElement>) =>
-  root
+const getNames = async (
+  root: ElementHandle<HTMLDivElement>
+): Promise<string[]> =>
+  (await root
     .$('div.personPhoto')
     .then(getInnerText('h2'))
-    .then((namesStr: string) => namesStr.split(/\s+/)) ?? []
+    .then((namesStr: string) => namesStr.split(/\s+/))) ?? []
 
-const getDates = (root: ElementHandle<HTMLDivElement>) =>
-  root
+const getDates = async (
+  root: ElementHandle<HTMLDivElement>
+): Promise<string[]> =>
+  await root
     .$('div.personPhoto')
     .then(getInnerText('p'))
-    .then((dateText: string) => dateText.split(/\D+/).filter((year) => year))
+    .then((dateText: string) =>
+      dateText
+        .replace('–', '-')
+        .split('-')
+        .map((str) => str.trim())
+        .filter((year) => year)
+    )
 
 const obituaryProcessor = createItemProcessor<HTMLDivElement, IObituary>(
-  obituaryDefaults,
+  createObituaryDefaults(),
   {
-    firstname: (root) =>
-      getNames(root)
+    firstname: async (root) =>
+      await getNames(root)
         .then((names) => names[0])
         .then(nameFormatter),
-    surname: (root) =>
-      getNames(root)
+    surname: async (root) =>
+      await getNames(root)
         .then((names) => (names.length > 1 ? names.slice(-1)[0] : ''))
         .then(nameFormatter),
-    middlename: (root) =>
-      getNames(root)
+    middlename: async (root) =>
+      await getNames(root)
         .then((names) => (names.length > 2 ? names[1] : ''))
         .then(nameFormatter),
-    dateOfDeath: (root) => getDates(root).then((dates) => dates[1]),
-    dateOfBirth: (root) => getDates(root).then((dates) => dates[0]),
+    date_of_death: async (root) =>
+      await getDates(root).then((dates) => dates[1]),
+    date_of_birth: async (root) =>
+      await getDates(root).then((dates) => dates[0]),
     relative: getInnerText('.signature'),
-    description: getInnerText('.maintext'),
-    imgUrl: getElementProperty('img', 'src')
+    long_text: getInnerText('.maintext'),
+    image: getElementProperty('img', 'src')
   }
 )
 

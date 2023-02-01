@@ -1,18 +1,9 @@
-import SiteCrawler from '../../lib/SiteCrawler'
-import { saveToDb } from '../common'
-import { createSiteProcessor } from '../../lib/helpers/createSiteProcessor'
+import { createSiteProcessor } from '../../helpers/createSiteProcessor'
 import { nextPageNavigator } from './pageNavigator'
 import pageProcessor from './pageProcessor'
-import { IObituary } from '../../lib/models/obituary/types'
 
-const siteProcessor = createSiteProcessor(
+export const siteProcessor = createSiteProcessor(
   pageProcessor,
   nextPageNavigator,
-  (_, pageIndex) => pageIndex >= 1
+  (result, page) => result.length >= 20 || page > 1
 )
-
-export default new SiteCrawler<IObituary[]>({
-  url: process.env.OSLOBODJENJE_URL as string,
-  outputHandler: saveToDb,
-  documentProcessor: siteProcessor
-})

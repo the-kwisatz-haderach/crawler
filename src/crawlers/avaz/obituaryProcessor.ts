@@ -1,42 +1,43 @@
 import { ElementHandle } from 'puppeteer'
-import { createItemProcessor } from '../../lib/helpers/createItemProcessor'
-import { getElementProperty } from '../../lib/helpers/getElementProperty'
-import { getInnerText } from '../../lib/helpers/getInnerText'
-import { IObituary } from '../../lib/models/obituary/types'
+import { createObituaryDefaults } from '../../domain/obituary/createObituaryDefaults'
+import { IObituary } from '../../domain/types'
+import { createItemProcessor } from '../../helpers/createItemProcessor'
+import { getElementProperty } from '../../helpers/getElementProperty'
+import { getInnerText } from '../../helpers/getInnerText'
 import nameFormatter from '../../utils/nameFormatter'
-import { obituaryDefaults } from '../common'
 
-const getNames = (root: ElementHandle) =>
-  getInnerText('h4.main-heading')(root).then((fullName) =>
+const getNames = async (root: ElementHandle): Promise<string[]> =>
+  await getInnerText('h4.main-heading')(root).then((fullName) =>
     fullName.split(/\s+/)
   )
 
 const obituaryProcessor = createItemProcessor<HTMLDivElement, IObituary>(
-  obituaryDefaults,
+  createObituaryDefaults(),
   {
-    firstname: (root) =>
-      getNames(root)
+    firstname: async (root) =>
+      await getNames(root)
         .then((names) => names[0])
         .then(nameFormatter),
-    surname: (root) =>
-      getNames(root)
+    surname: async (root) =>
+      await getNames(root)
         .then((names) => (names.length > 1 ? names.slice(-1)[0] : ''))
         .then(nameFormatter),
-    middlename: (root) =>
-      getNames(root)
+    middlename: async (root) =>
+      await getNames(root)
         .then((names) => (names.length > 2 ? names[1] : ''))
         .then(nameFormatter),
-    dateOfDeath: (root) => root.$('.obituary-footer').then(getInnerText('p')),
-    description: async (root) => {
+    date_of_death: async (root) =>
+      await root.$('.obituary-footer').then(getInnerText('p')),
+    long_text: async (root) => {
       const handle = await root.$$('p')
       const text = await Promise.all(
         handle
           .slice(-3, -1)
-          .map((handle) => handle.evaluate((el) => el.innerText))
+          .map(async (handle) => await handle.evaluate((el) => el.textContent))
       )
       return text.join('\n')
     },
-    imgUrl: getElementProperty('img', 'src')
+    image: getElementProperty('img', 'src')
   }
 )
 

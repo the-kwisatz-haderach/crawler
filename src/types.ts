@@ -1,12 +1,12 @@
 import type { ElementHandle, Page } from 'puppeteer'
-import { IObituary } from './models/obituary/types'
+import { IObituary } from './domain/types'
 
 export type PageProcessor<T> = (input: Page) => Promise<T>
-export type OutputHandler<T> = (crawlOutput: T) => void
+export type OutputHandler<T> = (crawlOutput: T) => Promise<void>
 export type ErrorHandler<T extends Error = Error> = (error: T) => void
 
 export type NextPageSelector = (page: Page) => Promise<ElementHandle | null>
-export type ElementSelector = (page: Page) => Promise<ElementHandle<any>[]>
+export type ElementSelector = (page: Page) => Promise<Array<ElementHandle<any>>>
 export type Navigator = (
   page: Page
 ) => Promise<{ success: boolean; isLastElement?: boolean }>
@@ -19,16 +19,17 @@ export type DetailPageNavigatorFactory = (
   nextPageLinkSelector: ElementSelector
 ) => Navigator
 
-export type SiteProcessorFactory = <T extends Record<string, unknown>>(
+export type SiteProcessorFactory = <T>(
   pageProcessor: PageProcessor<T[]>,
   nextListingNavigator: Navigator,
   stopCondition: (result: T[], pageIndex: number) => boolean,
-  detailedListingNavigator?: Navigator
+  detailedListingNavigator?: Navigator,
+  maxPages?: number
 ) => PageProcessor<T[]>
 
 export type ItemProcessorFactory = <
-  E extends Element = any,
-  T extends Record<string, unknown> = {}
+  E extends Element,
+  T extends Record<string, unknown>
 >(
   itemDefaults: T,
   propertyProcessors: {

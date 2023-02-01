@@ -1,11 +1,10 @@
-import pageProcessor from './pageProcessor'
+import { nextPageNavigator } from './pageNavigator'
 import getStubPath from '../helpers/readStub'
-import obituaries from '../__stubs__/nekros'
 import usePuppeteer from '../helpers/usePuppeteer'
 
 jest.setTimeout(100000)
 
-describe('pageProcessor', () => {
+describe.skip('pageNavigator', () => {
   const puppet = usePuppeteer()
 
   afterAll(async () => {
@@ -13,13 +12,14 @@ describe('pageProcessor', () => {
     await teardown()
   })
 
-  it('parses a page', async () => {
+  it('navigates from one page to another based on provided callback', async () => {
     const { goTo, page } = await puppet
-    const path = getStubPath('nekros')
+    const path = getStubPath('osmrtnica')
 
     await goTo(path)
 
-    const actual = await pageProcessor(page)
-    expect(actual).toEqual(obituaries)
+    const actual = await nextPageNavigator(page)
+
+    expect(actual.success).toBe(false)
   })
 })

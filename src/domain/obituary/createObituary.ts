@@ -1,6 +1,8 @@
-import { IObituary, IObituaryInput } from './types'
+import { IObituary, IObituaryInput } from '../types'
 
-export default function createObituary(input: IObituaryInput): IObituary {
+export default function createObituary(
+  input: IObituaryInput
+): Omit<IObituary, '_id'> {
   return {
     date_created: new Date().toISOString(),
     firstname: input.firstname,

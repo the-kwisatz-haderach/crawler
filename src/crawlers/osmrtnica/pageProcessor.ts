@@ -5,7 +5,7 @@ import obituaryProcessor from './obituaryProcessor'
 const pageProcessor: PageProcessor<IObituary[]> = async (page) => {
   const obituaries: IObituary[] = []
   try {
-    const obituary = await obituaryProcessor(await page.$('.obituary'))
+    const obituary = await obituaryProcessor(await page.$('.size-vise'))
 
     if (obituary) {
       obituaries.push(obituary)

@@ -1,6 +1,12 @@
-import puppeteer from 'puppeteer'
+import puppeteer, { Page } from 'puppeteer'
 
-const usePuppeteer = async (headless = true) => {
+const usePuppeteer = async (
+  headless = true
+): Promise<{
+  page: Page
+  goTo: (path: string) => Promise<void>
+  teardown: () => Promise<void>
+}> => {
   const browser = await puppeteer.launch({ headless })
   const page = await browser.newPage()
 
@@ -12,7 +18,7 @@ const usePuppeteer = async (headless = true) => {
     teardown: async () => {
       await page.close()
       await browser.close()
-    }
+    },
   }
 }
 

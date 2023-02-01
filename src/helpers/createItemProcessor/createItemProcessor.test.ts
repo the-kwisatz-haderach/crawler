@@ -1,7 +1,7 @@
-import getStubPath from '../../../crawlers/helpers/readStub'
-import usePuppeteer from '../../../crawlers/helpers/usePuppeteer'
-import obituaryProcessor from '../../../crawlers/oslobodjenje/obituaryProcessor'
-import { createObituary } from '../../models/obituary'
+import { createObituary } from '../../domain/obituary'
+import obituaryProcessor from '../../crawlers/avaz/obituaryProcessor'
+import getStubPath from '../../crawlers/helpers/readStub'
+import usePuppeteer from '../../crawlers/helpers/usePuppeteer'
 
 jest.setTimeout(100000)
 
@@ -27,9 +27,9 @@ describe('createItemProcessor', () => {
       createObituary({
         firstname: 'Zlatici',
         surname: '',
-        dateOfBirth: null,
-        dateOfDeath: null,
-        imgUrl:
+        date_of_birth: '',
+        date_of_death: '',
+        image:
           'https://cdn.oslobodjenje.ba/images/slike/2021/03/06/ob_media_79797-160.jpg',
         relative: 'Džana, Zijo, Arman i Dado'
       })
