@@ -6,6 +6,7 @@ const pageProcessor: PageProcessor<IObituary[]> = async (page) => {
   const obituaries: IObituary[] = []
   try {
     const items = await page.$$('.obituaryItem')
+    console.log(items)
 
     for (const item of items) {
       const values = await obituaryProcessor(item)
