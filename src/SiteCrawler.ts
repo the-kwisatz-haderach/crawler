@@ -44,6 +44,7 @@ export default class SiteCrawler<U> {
         await this.documentProcessor(page).then(this.outputHandler)
         await browser.close()
       } catch (err) {
+        console.error(err)
         this.errorHandler(err as Error)
       }
     }
