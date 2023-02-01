@@ -23,8 +23,8 @@ new SiteCrawler({
 //   outputHandler: saveToDb('nekros')
 // })
 
-// new SiteCrawler({
-//   url: 'https://www.osmrtnica.ba/',
-//   documentProcessor: osmrtnicaProcessor,
-//   outputHandler: saveToDb('osmrtnica')
-// })
+new SiteCrawler({
+  url: 'https://www.osmrtnica.ba/',
+  documentProcessor: osmrtnicaProcessor,
+  outputHandler: saveToDb('osmrtnica')
+}).crawl()
