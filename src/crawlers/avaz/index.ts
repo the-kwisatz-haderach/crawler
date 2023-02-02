@@ -6,6 +6,6 @@ import { IObituary } from '../../domain/types'
 export const siteProcessor = createSiteProcessor<IObituary>(
   pageProcessor,
   nextPageNavigator,
-  (result, page) => result.length >= 20 || page > 1,
+  (_, page) => page >= 1,
   detailPageNavigator
 )

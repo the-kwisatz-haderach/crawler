@@ -30,13 +30,12 @@ export default class SiteCrawler<U> {
     if (this.outputHandler) {
       const browser = await puppeteer.launch({
         headless: true,
-        args: ['--no-sandbox', '--disable-setuid-sandbox'],
-        slowMo: 300
+        slowMo: 200
+        // args: ['--no-sandbox', '--disable-setuid-sandbox'],
       })
       try {
         const page = await browser.newPage()
-        console.log(page)
-        page.setDefaultNavigationTimeout(90000)
+        page.setDefaultNavigationTimeout(30000)
         await page.goto(this.url, {
           waitUntil: 'domcontentloaded'
         })
