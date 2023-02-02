@@ -6,9 +6,13 @@ const pageProcessor: PageProcessor<IObituary[]> = async (page) => {
   const obituaries: IObituary[] = []
   try {
     const items = await page.$$('.obituaryItem')
-    const el = await page.$eval('.obituaryItem', (el) => el.outerHTML)
-    console.log('items ', items)
-    console.log('el ', el)
+    console.log('#')
+    console.log('#')
+    console.log('#')
+    console.log(items)
+    console.log('#')
+    console.log('#')
+    console.log('#')
     for (const item of items) {
       const values = await obituaryProcessor(item)
       if (values) {
