@@ -31,8 +31,8 @@ export default class SiteCrawler<U> {
       try {
         const browser = await puppeteer.launch({
           headless: true,
-          slowMo: 200
-          // args: ['--no-sandbox', '--disable-setuid-sandbox'],
+          slowMo: 200,
+          args: ['--no-sandbox', '--disable-setuid-sandbox']
         })
         console.log('after launch')
         const page = await browser.newPage()
