@@ -34,16 +34,14 @@ export default class SiteCrawler<U> {
           slowMo: 200,
           args: ['--no-sandbox', '--disable-setuid-sandbox']
         })
-        console.log('after launch')
         const page = await browser.newPage()
-        console.log('new page')
         page.setDefaultNavigationTimeout(30000)
         await page.goto(this.url, {
           waitUntil: 'domcontentloaded'
         })
-        console.log('after goto')
+        console.log(page)
+        await page.waitForNavigation()
         await this.documentProcessor(page).then(this.outputHandler)
-        console.log('after documentProcessor')
         await browser.close()
       } catch (err) {
         console.error(err)
