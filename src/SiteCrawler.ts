@@ -34,7 +34,8 @@ export default class SiteCrawler<U> {
     if (this.outputHandler) {
       try {
         const browser = await puppeteer.launch({
-          headless: true
+          headless: true,
+          args: ['--no-sandbox', '--disable-setuid-sandbox']
         })
         const page = await browser.newPage()
         page.setDefaultNavigationTimeout(90000)
