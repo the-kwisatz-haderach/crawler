@@ -5,11 +5,13 @@ import { siteProcessor as avazProcessor } from './crawlers/avaz'
 import { siteProcessor as nekrosProcessor } from './crawlers/nekros'
 import { siteProcessor as osmrtnicaProcessor } from './crawlers/osmrtnica'
 
-new SiteCrawler({
-  url: 'https://www.oslobodjenje.ba/smrtovnice',
-  documentProcessor: oslobodjenjeProcessor,
-  outputHandler: saveToDb('oslobodjenje')
-}).crawl()
+;(async () => {
+  await new SiteCrawler({
+    url: 'https://www.oslobodjenje.ba/smrtovnice',
+    documentProcessor: oslobodjenjeProcessor,
+    outputHandler: saveToDb('oslobodjenje')
+  }).crawl()
+})()
 
 // new SiteCrawler({
 //   url: 'https://digital.avaz.ba/smrtovnice',
