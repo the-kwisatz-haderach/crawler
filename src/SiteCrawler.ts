@@ -28,12 +28,12 @@ export default class SiteCrawler<U> {
 
   async crawl(): Promise<void> {
     if (this.outputHandler) {
-      const browser = await puppeteer.launch({
-        headless: true,
-        slowMo: 200
-        // args: ['--no-sandbox', '--disable-setuid-sandbox'],
-      })
       try {
+        const browser = await puppeteer.launch({
+          headless: true,
+          slowMo: 200
+          // args: ['--no-sandbox', '--disable-setuid-sandbox'],
+        })
         const page = await browser.newPage()
         page.setDefaultNavigationTimeout(30000)
         const res = await page.goto(this.url, {
@@ -42,11 +42,10 @@ export default class SiteCrawler<U> {
         const text = await res.text()
         console.log(text)
         await this.documentProcessor(page).then(this.outputHandler)
+        await browser.close()
       } catch (err) {
         console.error(err)
         this.errorHandler(err as Error)
-      } finally {
-        await browser.close()
       }
     }
   }
