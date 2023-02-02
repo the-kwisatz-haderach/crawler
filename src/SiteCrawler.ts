@@ -35,6 +35,7 @@ export default class SiteCrawler<U> {
       })
       try {
         const page = await browser.newPage()
+        console.log(page)
         page.setDefaultNavigationTimeout(90000)
         await page.goto(this.url, {
           waitUntil: 'domcontentloaded'
