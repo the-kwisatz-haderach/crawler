@@ -28,24 +28,26 @@ export default class SiteCrawler<U> {
 
   async crawl(): Promise<void> {
     if (this.outputHandler) {
+      const browser = await puppeteer.launch({
+        headless: true,
+        slowMo: 200,
+        args: ['--no-sandbox', '--disable-setuid-sandbox']
+      })
       try {
-        const browser = await puppeteer.launch({
-          headless: true,
-          slowMo: 200,
-          args: ['--no-sandbox', '--disable-setuid-sandbox']
-        })
         const page = await browser.newPage()
         page.setDefaultNavigationTimeout(30000)
         await page.goto(this.url, {
           waitUntil: 'domcontentloaded'
         })
-        console.log(page)
-        await page.waitForNavigation()
-        await this.documentProcessor(page).then(this.outputHandler)
-        await browser.close()
+        console.log(await page.content())
+        setTimeout(async () => {
+          await this.documentProcessor(page).then(this.outputHandler)
+        }, 2000)
       } catch (err) {
         console.error(err)
         this.errorHandler(err as Error)
+      } finally {
+        await browser.close()
       }
     }
   }
