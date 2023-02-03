@@ -34,7 +34,7 @@ export default class SiteCrawler<U> {
   async crawl(): Promise<void> {
     if (this.outputHandler) {
       const browser = await puppeteer.launch({
-        headless: false,
+        headless: true,
         slowMo: 200,
         executablePath: executablePath(),
         args: ['--no-sandbox']
