@@ -19,7 +19,7 @@ const getDates = async (
   await root
     .$$('div')
     .then((elements) => elements[5]?.evaluate((el) => el.textContent))
-    .then((dates) => dates.split(/\s+-\s+/))
+    .then((dates) => (dates || '').split(/\s+-\s+/))
 
 const getLongText = async (
   root: ElementHandle<HTMLDivElement>

@@ -2,6 +2,8 @@ import puppeteer from 'puppeteer-extra'
 import StealthPlugin from 'puppeteer-extra-plugin-stealth'
 import type { ErrorHandler, OutputHandler, PageProcessor } from './types'
 
+const { executablePath } = require('puppeteer')
+
 puppeteer.use(StealthPlugin())
 
 interface SiteCrawlerArgs<U> {
@@ -32,9 +34,10 @@ export default class SiteCrawler<U> {
   async crawl(): Promise<void> {
     if (this.outputHandler) {
       const browser = await puppeteer.launch({
-        headless: true,
+        headless: false,
         slowMo: 200,
-        args: ['--no-sandbox', '--disable-setuid-sandbox']
+        executablePath: executablePath(),
+        args: ['--no-sandbox']
       })
       try {
         const page = await browser.newPage()
@@ -42,10 +45,7 @@ export default class SiteCrawler<U> {
         await page.goto(this.url, {
           waitUntil: 'domcontentloaded'
         })
-        console.log(await page.content())
-        setTimeout(async () => {
-          await this.documentProcessor(page).then(this.outputHandler)
-        }, 2000)
+        await this.documentProcessor(page).then(this.outputHandler)
       } catch (err) {
         console.error(err)
         this.errorHandler(err as Error)
