@@ -48,9 +48,13 @@ const obituaryProcessor = createItemProcessor<HTMLDivElement, IObituary>(
       await getDates(root).then((dates) => dates[1]),
     date_of_birth: async (root) =>
       await getDates(root).then((dates) => dates[0]),
-    // relative: getInnerText('.signature'),
-    // long_text: getInnerText('.maintext'),
-    image: getElementProperty('img', 'src')
+    relative: async (root) =>
+      await getInnerText(
+        'div.details > div.row:nth-child(5) > div:last-child > p'
+      )(root).then((res) => res.replace(/Ožalošćeni:/, '').trim()),
+    image: getElementProperty('img', 'src'),
+    city: async (root) =>
+      await (await getInnerText('a')(root)).split('-')[1]?.trim()
   }
 )
 

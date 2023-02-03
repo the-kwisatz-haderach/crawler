@@ -42,8 +42,8 @@ export const createDetailPageNavigator: DetailPageNavigatorFactory = (
       return { success: false, isLastElement: true }
     } catch (err) {
       console.error('Detail page navigator error: ', err)
-      // await page.close()
       elementIndex = 0
+      await page.close()
       return { success: false }
     }
   }

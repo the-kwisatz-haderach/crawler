@@ -37,7 +37,6 @@ export default class SiteCrawler<U> {
         // headless: false,
         slowMo: 100,
         executablePath: executablePath()
-        // args: ['--no-sandbox']
       })
       try {
         const page = await browser.newPage()
