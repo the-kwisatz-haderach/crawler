@@ -1,5 +1,8 @@
-import puppeteer from 'puppeteer'
+import puppeteer from 'puppeteer-extra'
+import StealthPlugin from 'puppeteer-extra-plugin-stealth'
 import type { ErrorHandler, OutputHandler, PageProcessor } from './types'
+
+puppeteer.use(StealthPlugin())
 
 interface SiteCrawlerArgs<U> {
   url: string
