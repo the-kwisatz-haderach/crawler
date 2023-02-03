@@ -28,7 +28,6 @@ const createSiteProcessor: SiteProcessorFactory =
         }
 
         const { success, isLastElement } = await detailedListingNavigator(page)
-
         if (success) {
           const results = await pageProcessor(page)
           allResults.push(...results)

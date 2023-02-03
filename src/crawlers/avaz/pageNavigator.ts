@@ -1,6 +1,6 @@
 import {
   createPageNavigator,
-  createDetailPageNavigator,
+  createDetailPageNavigator
 } from '../../helpers/createPageNavigator'
 
 export const nextPageNavigator = createPageNavigator(async (page) => {

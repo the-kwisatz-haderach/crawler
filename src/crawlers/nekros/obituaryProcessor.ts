@@ -5,22 +5,29 @@ import { getElementProperty } from '../../helpers/getElementProperty'
 import { getInnerText } from '../../helpers/getInnerText'
 import nameFormatter from '../../utils/nameFormatter'
 import { createObituaryDefaults } from '../../domain/obituary/createObituaryDefaults'
+import { dateParser } from '../../utils/dateParser'
 
 const getNames = async (
   root: ElementHandle<HTMLDivElement>
 ): Promise<string[]> =>
   (await root
-    .$('div.personPhoto')
-    .then(getInnerText('h2'))
+    .$('aside')
+    .then(getInnerText('h4'))
     .then((namesStr: string) => namesStr.split(/\s+/))) ?? []
 
 const getDates = async (
   root: ElementHandle<HTMLDivElement>
 ): Promise<string[]> =>
   await root
-    .$('div.personPhoto')
-    .then(getInnerText('p'))
-    .then((dateText: string) => dateText.split(/\D+/).filter((year) => year))
+    .$('aside > div')
+    .then(getInnerText('p:last-child'))
+    .then((dateText: string) =>
+      dateText
+        ?.trim()
+        .split(/\s+-\s+/)
+        .filter(Boolean)
+        .map(dateParser)
+    )
 
 const obituaryProcessor = createItemProcessor<HTMLDivElement, IObituary>(
   createObituaryDefaults(),
@@ -41,8 +48,8 @@ const obituaryProcessor = createItemProcessor<HTMLDivElement, IObituary>(
       await getDates(root).then((dates) => dates[1]),
     date_of_birth: async (root) =>
       await getDates(root).then((dates) => dates[0]),
-    relative: getInnerText('.signature'),
-    long_text: getInnerText('.maintext'),
+    // relative: getInnerText('.signature'),
+    // long_text: getInnerText('.maintext'),
     image: getElementProperty('img', 'src')
   }
 )

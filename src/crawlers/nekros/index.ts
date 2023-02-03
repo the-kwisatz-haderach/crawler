@@ -1,9 +1,10 @@
 import { createSiteProcessor } from '../../helpers/createSiteProcessor'
-import { nextPageNavigator } from './pageNavigator'
+import { nextPageNavigator, detailPageNavigator } from './pageNavigator'
 import pageProcessor from './pageProcessor'
 
 export const siteProcessor = createSiteProcessor(
   pageProcessor,
   nextPageNavigator,
-  (_, page) => page >= 1
+  (results) => results.length >= 20,
+  detailPageNavigator
 )

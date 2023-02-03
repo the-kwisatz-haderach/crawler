@@ -34,14 +34,14 @@ export default class SiteCrawler<U> {
   async crawl(): Promise<void> {
     if (this.outputHandler) {
       const browser = await puppeteer.launch({
-        headless: true,
-        slowMo: 200,
-        executablePath: executablePath(),
-        args: ['--no-sandbox']
+        // headless: false,
+        slowMo: 100,
+        executablePath: executablePath()
+        // args: ['--no-sandbox']
       })
       try {
         const page = await browser.newPage()
-        page.setDefaultNavigationTimeout(30000)
+        page.setDefaultNavigationTimeout(10000)
         await page.goto(this.url, {
           waitUntil: 'domcontentloaded'
         })

@@ -5,15 +5,10 @@ import obituaryProcessor from './obituaryProcessor'
 const pageProcessor: PageProcessor<IObituary[]> = async (page) => {
   const obituaries: IObituary[] = []
   try {
-    const items = await page.$$('.obituaryItem')
-
-    for (const item of items) {
-      const values = await obituaryProcessor(item)
-      if (values) {
-        obituaries.push(values)
-      }
+    const obituary = await obituaryProcessor(await page.$('div.blog-content'))
+    if (obituary) {
+      obituaries.push(obituary)
     }
-
     return obituaries
   } catch (err) {
     console.error(err)
