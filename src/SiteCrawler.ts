@@ -1,3 +1,4 @@
+import { PuppeteerLaunchOptions } from 'puppeteer'
 import puppeteer from 'puppeteer-extra'
 import StealthPlugin from 'puppeteer-extra-plugin-stealth'
 import type { ErrorHandler, OutputHandler, PageProcessor } from './types'
@@ -31,22 +32,22 @@ export default class SiteCrawler<U> {
     this.errorHandler = errorHandler ?? console.error
   }
 
-  async crawl(): Promise<void> {
+  async crawl(options?: PuppeteerLaunchOptions): Promise<void> {
     if (this.outputHandler) {
       const browser = await puppeteer.launch({
-        // headless: false,
-        slowMo: 100,
+        ...options,
         executablePath: executablePath()
       })
       try {
         const page = await browser.newPage()
-        page.setDefaultNavigationTimeout(10000)
+        page.setDefaultNavigationTimeout(
+          Number.parseInt(process.env.PUPPETEER_NAVIGATION_TIMEOUT || '10000')
+        )
         await page.goto(this.url, {
           waitUntil: 'domcontentloaded'
         })
         await this.documentProcessor(page).then(this.outputHandler)
       } catch (err) {
-        console.error(err)
         this.errorHandler(err as Error)
       } finally {
         await browser.close()
