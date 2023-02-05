@@ -17,10 +17,9 @@ const getNames = async (
 const getDates = async (
   root: ElementHandle<HTMLDivElement>
 ): Promise<string[]> =>
-  await root
-    .$$('div')
-    .then((elements) => elements[5]?.evaluate((el) => el.textContent))
-    .then((dates) => (dates || '').split(/\s+-\s+/))
+  await getInnerText('div.red-ispod-imena + div')(root).then((dates) =>
+    (dates || '').split(/\s+-\s+/)
+  )
 
 const getLongText = async (
   root: ElementHandle<HTMLDivElement>

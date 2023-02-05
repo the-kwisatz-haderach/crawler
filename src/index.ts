@@ -1,12 +1,12 @@
 import SiteCrawler from './SiteCrawler'
 import { saveToDb } from './crawlers/common'
-import { siteProcessor as osmrtnicaProcessor } from './crawlers/osmrtnica'
+import { osmrtnicaObitCategoryProcessor } from './crawlers/osmrtnica'
 
 new SiteCrawler({
-  url: 'https://www.osmrtnica.ba/',
-  documentProcessor: osmrtnicaProcessor,
+  url: 'https://www.osmrtnica.ba/category/obavijest-o-smrti/',
+  documentProcessor: osmrtnicaObitCategoryProcessor,
   outputHandler: saveToDb('osmrtnica')
 }).crawl({
-  headless: process.env.PUPPETEER_HEADLESS !== 'false',
-  slowMo: 100
+  headless: process.env.PUPPETEER_HEADLESS !== 'false'
+  // slowMo: 100
 })

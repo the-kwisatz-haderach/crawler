@@ -2,7 +2,9 @@ import { IObituary } from '../../domain/types'
 import { PageProcessor } from '../../types'
 import obituaryProcessor from './obituaryProcessor'
 
-const pageProcessor: PageProcessor<IObituary[]> = async (page) => {
+export const obituaryCategoryProcessor: PageProcessor<IObituary[]> = async (
+  page
+) => {
   const obituaries: IObituary[] = []
   try {
     const obituary = await obituaryProcessor(await page.$('div.size-vise'))
@@ -15,5 +17,3 @@ const pageProcessor: PageProcessor<IObituary[]> = async (page) => {
     return obituaries
   }
 }
-
-export default pageProcessor

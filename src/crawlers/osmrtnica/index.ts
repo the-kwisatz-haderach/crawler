@@ -1,9 +1,9 @@
 import { createSiteProcessor } from '../../helpers/createSiteProcessor'
 import { nextPageNavigator, detailPageNavigator } from './pageNavigator'
-import pageProcessor from './pageProcessor'
+import { obituaryCategoryProcessor } from './pageProcessor'
 
-export const siteProcessor = createSiteProcessor(
-  pageProcessor,
+export const osmrtnicaObitCategoryProcessor = createSiteProcessor(
+  obituaryCategoryProcessor,
   nextPageNavigator,
   (_, page) => page >= 1,
   detailPageNavigator

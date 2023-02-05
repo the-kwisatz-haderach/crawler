@@ -31,19 +31,19 @@ const createSiteProcessor: SiteProcessorFactory =
         if (success) {
           const results = await pageProcessor(page)
           allResults.push(...results)
-          await page.goBack()
+          await page.goBack({ waitUntil: 'domcontentloaded' })
           pageIndex -= 1
           continue
         }
 
         if (isLastElement) {
-          const { success } = await nextListingNavigator(page)
-          if (success) {
+          const { success: nextSuccess } = await nextListingNavigator(page)
+          if (nextSuccess) {
             continue
           }
         }
 
-        break
+        return allResults
       }
     } catch (err) {
       console.error(err)

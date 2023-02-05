@@ -4,6 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
+    "run": "yarn build && yarn start",
     "build": "tsc",
     "test": "jest --watchAll --detectOpenHandles",
     "test:monitor": "node --expose-gc ./node_modules/.bin/jest --runInBand --logHeapUsage",

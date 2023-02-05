@@ -16,6 +16,7 @@ module.exports = {
     'space-before-function-paren': 'off',
     'no-unused-vars': 'off',
     '@typescript-eslint/no-unused-vars': ['error'],
-    camelcase: 'off'
+    camelcase: 'off',
+    indent: 'off'
   }
 }

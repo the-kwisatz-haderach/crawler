@@ -23,6 +23,7 @@ const createItemProcessor: ItemProcessorFactory =
         itemDefaults
       )
     } catch (err) {
+      console.error(err)
       return null
     }
   }
