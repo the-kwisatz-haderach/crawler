@@ -13,7 +13,7 @@ const getNames = async (
   try {
     return (
       (await getInnerText('div.title2')(root).then((namesStr: string) =>
-        namesStr.split(/\W+/g)
+        namesStr.split(/[-– ]+/g)
       )) ?? []
     )
   } catch {
