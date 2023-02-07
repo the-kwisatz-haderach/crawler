@@ -9,46 +9,85 @@ import { dateParser } from '../../utils/dateParser'
 
 const getNames = async (
   root: ElementHandle<HTMLDivElement>
-): Promise<string[]> =>
-  (await getInnerText('div.title2')(root).then((namesStr: string) =>
-    namesStr.split(/\s+/)
-  )) ?? []
+): Promise<string[]> => {
+  try {
+    return (
+      (await getInnerText('div.title2')(root).then((namesStr: string) =>
+        namesStr.split(/\W+/g)
+      )) ?? []
+    )
+  } catch {
+    return []
+  }
+}
 
 const getDates = async (
   root: ElementHandle<HTMLDivElement>
-): Promise<string[]> =>
-  await getInnerText('div.red-ispod-imena + div')(root).then((dates) =>
-    (dates || '').split(/\s+-\s+/)
-  )
+): Promise<string[]> => {
+  try {
+    return await getInnerText('div.red-ispod-imena + div')(root).then((dates) =>
+      (dates || '').split(/\s+-\s+/)
+    )
+  } catch {
+    return []
+  }
+}
 
 const getLongText = async (
   root: ElementHandle<HTMLDivElement>
 ): Promise<string> => {
-  const text = await root
-    .$$('p')
-    .then(
-      async (elements) =>
-        await Promise.all(
-          elements.map((element) =>
-            element?.evaluate((el) => el.textContent || '')
+  try {
+    return await root
+      .$$('div:nth-child(8) > p')
+      .then(
+        async (elements = []) =>
+          await Promise.all(
+            elements
+              .slice(0, -1)
+              .map((element) => element?.evaluate((el) => el.textContent || ''))
           )
-        )
-    )
-    .then((text) => text.join('\n'))
-  return text
+      )
+      .then((text) => text.join('\n').trim())
+  } catch {
+    return ''
+  }
+}
+
+const getRelative = async (
+  root: ElementHandle<HTMLDivElement>
+): Promise<string> => {
+  try {
+    return await root
+      .$$('div:nth-child(8) > p')
+      .then(
+        async (elements = []) =>
+          await Promise.all(
+            elements
+              .slice(-1)
+              .map((element) => element?.evaluate((el) => el.textContent || ''))
+          )
+      )
+      .then((text) => text.join('\n').replace(/.+:/g, '').trim())
+  } catch {
+    return ''
+  }
 }
 
 const getType = async (
   root: ElementHandle<HTMLDivElement>
 ): Promise<ObituaryType> => {
-  const type = (await getInnerText('div.tab')(root)).trim().toLowerCase()
-  switch (true) {
-    case /sjećanje/g.test(type):
-      return 'in-memoriam'
-    case /posljednji/g.test(type):
-      return 'last-greetings'
-    default:
-      return 'obituary'
+  try {
+    const type = (await getInnerText('div.tab')(root)).trim().toLowerCase()
+    switch (true) {
+      case /sjećanje/g.test(type):
+        return 'in-memoriam'
+      case /posljednji/g.test(type):
+        return 'last-greetings'
+      default:
+        return 'obituary'
+    }
+  } catch {
+    return 'obituary'
   }
 }
 
@@ -56,25 +95,16 @@ const obituaryProcessor = createItemProcessor<HTMLDivElement, IObituary>(
   createObituaryDefaults(),
   {
     firstname: async (root) =>
-      await getNames(root)
-        .then((names) => names[0])
-        .then(nameFormatter),
+      await getNames(root).then((names) => nameFormatter(names[0] || '')),
     surname: async (root) =>
-      await getNames(root)
-        .then((names) => (names.length > 1 ? names.slice(-1)[0] : ''))
-        .then(nameFormatter),
-    middlename: async (root) =>
-      await getNames(root)
-        .then((names) => (names.length > 2 ? names[1] : ''))
-        .then(nameFormatter),
+      await getNames(root).then((names) => nameFormatter(names[1] || '')),
+    name_misc: async (root) =>
+      await getNames(root).then((names) => nameFormatter(names[2] || '')),
     date_of_birth: async (root) =>
-      await getDates(root)
-        .then((dates) => dates[0])
-        .then(dateParser),
+      await getDates(root).then((dates) => dateParser(dates[0])),
     date_of_death: async (root) =>
-      await getDates(root)
-        .then((dates) => dates[1])
-        .then(dateParser),
+      await getDates(root).then((dates) => dateParser(dates[1])),
+    relative: getRelative,
     type: getType,
     long_text: getLongText,
     image: getElementProperty('img.okvir', 'src')

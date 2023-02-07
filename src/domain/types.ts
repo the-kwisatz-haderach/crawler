@@ -16,7 +16,7 @@ export interface IAppreciation {
 export interface IObituary extends Record<string, unknown> {
   firstname: string
   surname: string
-  middlename?: string
+  name_misc?: string
   date_of_birth: string
   date_of_death: string
   image?: string
@@ -35,7 +35,7 @@ export interface IObituary extends Record<string, unknown> {
 
 export interface IObituaryInput extends Record<string, unknown> {
   firstname: string
-  middlename?: string
+  name_misc?: string
   surname: string
   date_of_birth: string
   date_of_death: string

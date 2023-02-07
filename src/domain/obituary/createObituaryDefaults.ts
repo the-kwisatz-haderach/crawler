@@ -9,5 +9,11 @@ export const createObituaryDefaults = (): IObituary => ({
   type: 'obituary',
   date_created: new Date().toISOString(),
   date_updated: new Date().toISOString(),
-  long_text: ''
+  long_text: '',
+  name_misc: '',
+  city: '',
+  additional_information: '',
+  preamble: '',
+  relative: '',
+  size: 'regular'
 })

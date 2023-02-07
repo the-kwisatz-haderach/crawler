@@ -2,14 +2,14 @@ import { IObituary } from '../../domain/types'
 
 const obituaryIdGenerator = ({
   firstname,
-  middlename,
+  name_misc,
   surname,
   relative
 }: Pick<
   IObituary,
-  'firstname' | 'middlename' | 'surname' | 'relative'
+  'firstname' | 'name_misc' | 'surname' | 'relative'
 >): string =>
-  [firstname, middlename, surname, relative]
+  [firstname, name_misc, surname, relative]
     .filter(Boolean)
     .flatMap((val) => [...(val as string)].map((char) => char.charCodeAt(0)))
     .join('')

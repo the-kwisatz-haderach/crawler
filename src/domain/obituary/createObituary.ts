@@ -11,7 +11,7 @@ export default function createObituary(
     date_of_death: input.date_of_death,
     image: input.image || '',
     type: input.type || 'obituary',
-    middlename: input.middlename || '',
+    name_misc: input.name_misc || '',
     relative: input.relative || '',
     long_text: input.long_text || '',
     is_crawled: true

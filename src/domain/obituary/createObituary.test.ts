@@ -19,9 +19,9 @@ describe('createObituary', () => {
       image: '',
       type: 'obituary',
       long_text: '',
-      middlename: '',
+      name_misc: '',
       relative: '',
-      is_crawled: true,
+      is_crawled: true
     }
     expect(
       createObituary({
@@ -29,7 +29,7 @@ describe('createObituary', () => {
         firstname: 'Hello',
         surname: 'World',
         date_of_birth: date_of_birth.toString(),
-        date_of_death: date_of_death.toString(),
+        date_of_death: date_of_death.toString()
       })
     ).toEqual(expected)
   })
@@ -46,9 +46,9 @@ describe('createObituary', () => {
       image: 'testurl',
       type: 'gratitude-display',
       long_text: 'Some description',
-      middlename: 'middlename',
+      name_misc: 'middlename',
       relative: 'relatives',
-      is_crawled: true,
+      is_crawled: true
     }
     expect(
       createObituary({
@@ -59,8 +59,8 @@ describe('createObituary', () => {
         type: 'gratitude-display',
         long_text: 'Some description',
         image: 'testurl',
-        middlename: 'middlename',
-        relative: 'relatives',
+        name_misc: 'middlename',
+        relative: 'relatives'
       })
     ).toEqual(expected)
   })
