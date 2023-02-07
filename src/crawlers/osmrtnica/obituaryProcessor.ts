@@ -67,7 +67,7 @@ const getRelative = async (
               .map((element) => element?.evaluate((el) => el.textContent || ''))
           )
       )
-      .then((text) => text.join('\n').replace(/.+:/g, '').trim())
+      .then((text) => text.join('\n').replace(/^.+?:/g, '').trim())
   } catch {
     return ''
   }
