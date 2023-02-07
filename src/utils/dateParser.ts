@@ -1,4 +1,4 @@
-export const dateParser = (dateString: string): string => {
+export const dateParser = (dateString = ''): string => {
   const dates = (dateString.match(/\d+/g) || []).map(Number)
   if (dates.length === 1) {
     return new Date(Date.UTC(dates[0], 0, 1)).toISOString()
