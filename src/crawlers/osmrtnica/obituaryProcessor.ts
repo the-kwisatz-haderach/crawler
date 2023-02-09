@@ -33,7 +33,7 @@ const getLongText = async (
               .map((element) => element?.evaluate((el) => el.textContent || ''))
           )
       )
-      .then((text) => text.join('\n').trim())
+      .then((text) => text.join(' \n').trim())
   } catch {
     return ''
   }
