@@ -1,10 +1,10 @@
 import { IObituary, IObituaryInput } from './types'
 
-export default function createObituary(
-  input: IObituaryInput
-): Omit<IObituary, '_id'> {
+export default function createObituary(input: IObituaryInput): IObituary {
+  const currentDate = new Date(Date.now()).toISOString()
   return {
-    date_created: new Date().toISOString(),
+    date_created: currentDate,
+    date_updated: currentDate,
     firstname: input.firstname,
     surname: input.surname,
     date_of_birth: input.date_of_birth,
@@ -15,6 +15,10 @@ export default function createObituary(
     relative: input.relative || '',
     long_text: input.long_text || '',
     prefix: input.prefix || '',
-    is_crawled: true
+    is_crawled: true,
+    preamble: '',
+    size: 'regular',
+    city: '',
+    additional_information: ''
   }
 }

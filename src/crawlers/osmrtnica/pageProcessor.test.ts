@@ -1,4 +1,4 @@
-import handler from './pageProcessor'
+import { obituaryCategoryProcessor } from './pageProcessor'
 import getStubPath from '../helpers/readStub'
 import obituaries from '../__stubs__/osmrtnica'
 import usePuppeteer from '../helpers/usePuppeteer'
@@ -19,7 +19,7 @@ describe('pageProcessor', () => {
 
     await goTo(path)
 
-    const actual = await handler(page)
-    expect(actual).toEqual([obituaries.osmrtnica_1])
+    const actual = await obituaryCategoryProcessor(page)
+    expect(actual).toEqual(obituaries.osmrtnica_1)
   })
 })

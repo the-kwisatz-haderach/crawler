@@ -7,6 +7,8 @@ import nameParser from '../../utils/nameParser'
 import { createObituaryDefaults } from '../../domain/createObituaryDefaults'
 import { dateParser } from '../../utils/dateParser'
 
+const htmlTagsRegexp = /<(?:"[^"]*"['"]*|'[^']*'['"]*|[^'">])+>/g
+
 const getDates = async (
   root: ElementHandle<HTMLDivElement>
 ): Promise<string[]> => {
@@ -30,10 +32,12 @@ const getLongText = async (
           await Promise.all(
             elements
               .slice(0, -1)
-              .map((element) => element?.evaluate((el) => el.textContent || ''))
+              .map((element) => element?.evaluate((el) => el.innerHTML || ''))
           )
       )
-      .then((text) => text.join('</br>').trim())
+      .then((text) =>
+        text.map((t) => `<p>${t.replace(htmlTagsRegexp, '')}</p>`).join('<br>')
+      )
   } catch {
     return ''
   }
@@ -50,10 +54,17 @@ const getRelative = async (
           await Promise.all(
             elements
               .slice(-1)
-              .map((element) => element?.evaluate((el) => el.textContent || ''))
+              .map((element) => element?.evaluate((el) => el.innerHTML || ''))
           )
       )
-      .then((text) => text.join('\n').replace(/^.+?:/g, '').trim())
+      .then((text) => {
+        return text
+          .join('')
+          .replace(htmlTagsRegexp, ' ')
+          .replace(/^.+?:/g, '')
+          .replace(/&nbsp;+/g, '')
+          .trim()
+      })
   } catch {
     return ''
   }
