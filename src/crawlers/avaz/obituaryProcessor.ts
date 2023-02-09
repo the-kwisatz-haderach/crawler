@@ -4,7 +4,7 @@ import { IObituary } from '../../domain/types'
 import { createItemProcessor } from '../../helpers/createItemProcessor'
 import { getElementProperty } from '../../helpers/getElementProperty'
 import { getInnerText } from '../../helpers/getInnerText'
-import nameFormatter from '../../utils/nameFormatter'
+import nameFormatter from '../../utils/nameParser'
 
 const getNames = async (root: ElementHandle): Promise<string[]> =>
   await getInnerText('h4.main-heading')(root).then((fullName) =>

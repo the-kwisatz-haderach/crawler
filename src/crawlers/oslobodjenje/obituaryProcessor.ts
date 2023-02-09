@@ -3,7 +3,7 @@ import { IObituary } from '../../domain/types'
 import { createItemProcessor } from '../../helpers/createItemProcessor'
 import { getElementProperty } from '../../helpers/getElementProperty'
 import { getInnerText } from '../../helpers/getInnerText'
-import nameFormatter from '../../utils/nameFormatter'
+import nameFormatter from '../../utils/nameParser'
 import { createObituaryDefaults } from '../../domain/obituary/createObituaryDefaults'
 
 const getNames = async (

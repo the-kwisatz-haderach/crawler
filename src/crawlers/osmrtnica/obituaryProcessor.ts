@@ -3,23 +3,9 @@ import { IObituary, ObituaryType } from '../../domain/types'
 import { createItemProcessor } from '../../helpers/createItemProcessor'
 import { getElementProperty } from '../../helpers/getElementProperty'
 import { getInnerText } from '../../helpers/getInnerText'
-import nameFormatter from '../../utils/nameFormatter'
+import nameParser from '../../utils/nameParser'
 import { createObituaryDefaults } from '../../domain/obituary/createObituaryDefaults'
 import { dateParser } from '../../utils/dateParser'
-
-const getNames = async (
-  root: ElementHandle<HTMLDivElement>
-): Promise<string[]> => {
-  try {
-    return (
-      (await getInnerText('div.title2')(root).then((namesStr: string) =>
-        namesStr.split(/[-– ]+/g)
-      )) ?? []
-    )
-  } catch {
-    return []
-  }
-}
 
 const getDates = async (
   root: ElementHandle<HTMLDivElement>
@@ -95,11 +81,17 @@ const obituaryProcessor = createItemProcessor<HTMLDivElement, IObituary>(
   createObituaryDefaults(),
   {
     firstname: async (root) =>
-      await getNames(root).then((names) => nameFormatter(names[0] || '')),
+      await getInnerText('div.title2')(root).then(
+        (names) => nameParser(names).firstname
+      ),
     surname: async (root) =>
-      await getNames(root).then((names) => nameFormatter(names[1] || '')),
+      await getInnerText('div.title2')(root).then(
+        (names) => nameParser(names).surname
+      ),
     name_misc: async (root) =>
-      await getNames(root).then((names) => nameFormatter(names[2] || '')),
+      await getInnerText('div.title2')(root).then(
+        (names) => nameParser(names).name_misc
+      ),
     date_of_birth: async (root) =>
       await getDates(root).then((dates) => dateParser(dates[0])),
     date_of_death: async (root) =>
