@@ -1,4 +1,4 @@
-import { createObituary } from '../../domain/obituary'
+import { createObituary } from '../../domain'
 import { IObituary } from '../../domain/types'
 
 const expected: Record<string, Array<Omit<IObituary, '_id'>>> = {
