@@ -1,4 +1,4 @@
-import { IObituary } from '../types'
+import { IObituary } from './types'
 import createObituary from './createObituary'
 
 jest

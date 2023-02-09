@@ -4,7 +4,7 @@ import { createItemProcessor } from '../../helpers/createItemProcessor'
 import { getElementProperty } from '../../helpers/getElementProperty'
 import { getInnerText } from '../../helpers/getInnerText'
 import nameParser from '../../utils/nameParser'
-import { createObituaryDefaults } from '../../domain/obituary/createObituaryDefaults'
+import { createObituaryDefaults } from '../../domain/createObituaryDefaults'
 import { dateParser } from '../../utils/dateParser'
 
 const getDates = async (
@@ -33,7 +33,7 @@ const getLongText = async (
               .map((element) => element?.evaluate((el) => el.textContent || ''))
           )
       )
-      .then((text) => text.join(' \n').trim())
+      .then((text) => text.join('</br>').trim())
   } catch {
     return ''
   }
@@ -91,6 +91,10 @@ const obituaryProcessor = createItemProcessor<HTMLDivElement, IObituary>(
     name_misc: async (root) =>
       await getInnerText('div.title2')(root).then(
         (names) => nameParser(names).name_misc
+      ),
+    prefix: async (root) =>
+      await getInnerText('div.title2')(root).then(
+        (names) => nameParser(names).prefix
       ),
     date_of_birth: async (root) =>
       await getDates(root).then((dates) => dateParser(dates[0])),

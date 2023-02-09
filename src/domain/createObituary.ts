@@ -1,4 +1,4 @@
-import { IObituary, IObituaryInput } from '../types'
+import { IObituary, IObituaryInput } from './types'
 
 export default function createObituary(
   input: IObituaryInput
@@ -14,6 +14,7 @@ export default function createObituary(
     name_misc: input.name_misc || '',
     relative: input.relative || '',
     long_text: input.long_text || '',
+    prefix: input.prefix || '',
     is_crawled: true
   }
 }

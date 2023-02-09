@@ -1,8 +1,9 @@
-import { IObituary } from '../types'
+import { IObituary } from './types'
 
 export const createObituaryDefaults = (): IObituary => ({
   firstname: '',
   surname: '',
+  prefix: '',
   date_of_birth: '',
   date_of_death: '',
   is_crawled: true,
