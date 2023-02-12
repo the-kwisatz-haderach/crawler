@@ -13,7 +13,9 @@ export const createDbInserter = (
         await client.connect()
         const db = await client.db(dbName)
         console.log('Successfully connected to database server')
-        await db.collection('obituaries').insertMany(obituaries)
+        await db
+          .collection('obituaries')
+          .insertMany(obituaries, { ordered: false })
         console.log(
           `Inserted ${obituaries.length} entries from crawler ${crawler} into db`
         )
