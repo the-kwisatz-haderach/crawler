@@ -1,14 +1,16 @@
-import { IObituary, IObituaryInput } from './types'
+import { IObituary } from './types'
 
-export default function createObituary(input: IObituaryInput): IObituary {
+export default function createObituary(input: Partial<IObituary>): IObituary {
   const currentDate = new Date(Date.now()).toISOString()
   return {
+    ...input,
+    appreciations: input.appreciations || 0,
     date_created: currentDate,
     date_updated: currentDate,
-    firstname: input.firstname,
-    surname: input.surname,
-    date_of_birth: input.date_of_birth,
-    date_of_death: input.date_of_death,
+    firstname: input.firstname || '',
+    surname: input.surname || '',
+    date_of_birth: input.date_of_birth || '',
+    date_of_death: input.date_of_death || '',
     image: input.image || '',
     type: input.type || 'obituary',
     name_misc: input.name_misc || '',

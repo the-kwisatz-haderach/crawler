@@ -1,11 +1,10 @@
 import { ElementHandle } from 'puppeteer'
 import { IObituary, ObituaryType } from '../../domain/types'
-import { createItemProcessor } from '../../helpers/createItemProcessor'
 import { getElementProperty } from '../../helpers/getElementProperty'
 import { getInnerText } from '../../helpers/getInnerText'
 import nameParser from '../../utils/nameParser'
-import { createObituaryDefaults } from '../../domain/createObituaryDefaults'
 import { dateParser } from '../../utils/dateParser'
+import { createObituary } from '../../domain'
 
 const htmlTagsRegexp = /<(?:"[^"]*"['"]*|'[^']*'['"]*|[^'">])+>/g
 
@@ -88,34 +87,33 @@ const getType = async (
   }
 }
 
-const obituaryProcessor = createItemProcessor<HTMLDivElement, IObituary>(
-  createObituaryDefaults(),
-  {
-    firstname: async (root) =>
-      await getInnerText('div.title2')(root).then(
-        (names) => nameParser(names).firstname
-      ),
-    surname: async (root) =>
-      await getInnerText('div.title2')(root).then(
-        (names) => nameParser(names).surname
-      ),
-    name_misc: async (root) =>
-      await getInnerText('div.title2')(root).then(
-        (names) => nameParser(names).name_misc
-      ),
-    prefix: async (root) =>
-      await getInnerText('div.title2')(root).then(
-        (names) => nameParser(names).prefix
-      ),
-    date_of_birth: async (root) =>
-      await getDates(root).then((dates) => dateParser(dates[0])),
-    date_of_death: async (root) =>
-      await getDates(root).then((dates) => dateParser(dates[1])),
-    relative: getRelative,
-    type: getType,
-    long_text: getLongText,
-    image: getElementProperty('img.okvir', 'src')
-  }
-)
+const obituaryProcessor = async <E extends Element>(
+  root: ElementHandle<E>
+): Promise<IObituary | null> => {
+  const { firstname, prefix, surname, name_misc } = await getInnerText(
+    'div.title2'
+  )(root).then((names) => nameParser(names))
+  const dates = await getDates(root)
+  const currentDate = new Date(Date.now()).toISOString()
+
+  if (!firstname && !surname) return null
+  if (!dates.length) return null
+
+  return createObituary({
+    firstname,
+    surname,
+    name_misc,
+    prefix,
+    date_created: currentDate,
+    date_updated: currentDate,
+    is_crawled: true,
+    date_of_birth: dateParser(dates[0]),
+    date_of_death: dateParser(dates[1]),
+    relative: await getRelative(root),
+    type: await getType(root),
+    long_text: await getLongText(root),
+    image: await getElementProperty('img.okvir', 'src')(root)
+  })
+}
 
 export default obituaryProcessor

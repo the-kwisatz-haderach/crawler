@@ -7,7 +7,11 @@ export const obituaryCategoryProcessor: PageProcessor<IObituary[]> = async (
 ) => {
   const obituaries: IObituary[] = []
   try {
-    const obituary = await obituaryProcessor(await page.$('div.size-vise'))
+    const container = await page.$('div.size-vise')
+    if (!container) {
+      return obituaries
+    }
+    const obituary = await obituaryProcessor(container)
     if (obituary) {
       obituaries.push(obituary)
     }

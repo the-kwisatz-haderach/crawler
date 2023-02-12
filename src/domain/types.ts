@@ -1,3 +1,4 @@
+import { ObjectId } from 'mongodb'
 import { Richtext } from 'storyblok-js-client'
 
 export type ObituaryType =
@@ -8,12 +9,9 @@ export type ObituaryType =
 
 export type FaithType = 'christian' | 'muslim'
 
-export interface IAppreciation {
-  _id: string
-  quantity: number
-}
-
 export interface IObituary extends Record<string, unknown> {
+  _id?: ObjectId
+  storyId?: number
   firstname: string
   surname: string
   name_misc?: string
@@ -32,18 +30,5 @@ export interface IObituary extends Record<string, unknown> {
   date_updated?: string
   faith?: FaithType
   is_crawled: boolean
-}
-
-export interface IObituaryInput extends Record<string, unknown> {
-  firstname: string
-  name_misc?: string
-  prefix?: string
-  surname: string
-  date_of_birth: string
-  date_of_death: string
-  relative?: string
-  long_text?: string
-  image?: string
-  type?: ObituaryType
-  faith?: FaithType
+  appreciations: number
 }
