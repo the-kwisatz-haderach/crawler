@@ -1,19 +1,20 @@
+import { createObituaryCategoryProcessor } from '../../crawlers/osmrtnica/pageProcessor'
 import { SiteProcessorFactory } from '../../types'
 
-const createSiteProcessor: SiteProcessorFactory =
-  (
-    pageProcessor,
-    nextListingNavigator,
-    stopCondition,
-    detailedListingNavigator,
-    maxPages = 10
-  ) =>
-  async (page) => {
+const createSiteProcessor: SiteProcessorFactory = (
+  obituaryProcessor,
+  nextListingNavigator,
+  shouldStop,
+  detailedListingNavigator,
+  maxPages = 10
+) => {
+  const pageProcessor = createObituaryCategoryProcessor(obituaryProcessor)
+  return async (page) => {
     const allResults = []
     try {
       for (
         let pageIndex = 0;
-        !stopCondition(allResults, pageIndex) && pageIndex <= maxPages;
+        !shouldStop(allResults, pageIndex) && pageIndex <= maxPages;
         pageIndex += 1
       ) {
         if (!detailedListingNavigator) {
@@ -47,9 +48,11 @@ const createSiteProcessor: SiteProcessorFactory =
       }
     } catch (err) {
       console.error(err)
+      return allResults
     }
 
     return allResults
   }
+}
 
 export default createSiteProcessor

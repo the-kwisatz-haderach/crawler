@@ -46,7 +46,9 @@ export default class SiteCrawler<U> {
         await page.goto(this.url, {
           waitUntil: 'domcontentloaded'
         })
-        await this.documentProcessor(page).then(this.outputHandler)
+        const output = await this.documentProcessor(page)
+        await page.close()
+        await this.outputHandler(output)
       } catch (err) {
         this.errorHandler(err as Error)
       } finally {

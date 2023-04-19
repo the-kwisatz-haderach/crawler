@@ -1,46 +1,16 @@
 import { ElementHandle } from 'puppeteer'
-import { IObituary, ObituaryType } from '../../domain/types'
+import { IObituary } from '../../domain/types'
 import { getElementProperty } from '../../helpers/getElementProperty'
 import { getInnerText } from '../../helpers/getInnerText'
 import nameParser from '../../utils/nameParser'
 import { dateParser } from '../../utils/dateParser'
 import { createObituary } from '../../domain'
-
-const htmlTagsRegexp = /<(?:"[^"]*"['"]*|'[^']*'['"]*|[^'">])+>/g
-
-const getDates = async (
-  root: ElementHandle<HTMLDivElement>
-): Promise<string[]> => {
-  try {
-    return await getInnerText('div.red-ispod-imena + div')(root).then((dates) =>
-      (dates || '').split(/\s+-\s+/)
-    )
-  } catch {
-    return []
-  }
-}
-
-const getLongText = async (
-  root: ElementHandle<HTMLDivElement>
-): Promise<string> => {
-  try {
-    return await root
-      .$$('div:nth-child(8) > p')
-      .then(
-        async (elements = []) =>
-          await Promise.all(
-            elements
-              .slice(0, -1)
-              .map((element) => element?.evaluate((el) => el.innerHTML || ''))
-          )
-      )
-      .then((text) =>
-        text.map((t) => `<p>${t.replace(htmlTagsRegexp, '')}</p>`).join('<br>')
-      )
-  } catch {
-    return ''
-  }
-}
+import {
+  getDates,
+  getLongTextExclLast,
+  getType,
+  htmlTagsRegexp
+} from '../common/handlers'
 
 const getRelative = async (
   root: ElementHandle<HTMLDivElement>
@@ -62,6 +32,7 @@ const getRelative = async (
           .replace(htmlTagsRegexp, ' ')
           .replace(/^.+?:/g, '')
           .replace(/&nbsp;+/g, '')
+          .replace(/\.(?=\S)/g, '. ')
           .trim()
       })
   } catch {
@@ -69,25 +40,7 @@ const getRelative = async (
   }
 }
 
-const getType = async (
-  root: ElementHandle<HTMLDivElement>
-): Promise<ObituaryType> => {
-  try {
-    const type = (await getInnerText('div.tab')(root)).trim().toLowerCase()
-    switch (true) {
-      case /sjećanje/g.test(type):
-        return 'in-memoriam'
-      case /posljednji/g.test(type):
-        return 'last-greetings'
-      default:
-        return 'obituary'
-    }
-  } catch {
-    return 'obituary'
-  }
-}
-
-const obituaryProcessor = async <E extends Element>(
+export const osmrtnicaProcessor = async <E extends Element>(
   root: ElementHandle<E>
 ): Promise<IObituary | null> => {
   const { firstname, prefix, surname, name_misc } = await getInnerText(
@@ -110,10 +63,8 @@ const obituaryProcessor = async <E extends Element>(
     date_of_birth: dateParser(dates[0]),
     date_of_death: dateParser(dates[1]),
     relative: await getRelative(root),
-    type: await getType(root),
-    long_text: await getLongText(root),
+    type: await getType('obituary')(root),
+    long_text: await getLongTextExclLast(root),
     image: await getElementProperty('img.okvir', 'src')(root)
   })
 }
-
-export default obituaryProcessor
