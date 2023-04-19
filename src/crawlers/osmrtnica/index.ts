@@ -5,10 +5,8 @@ import { sjecanjeProcessor } from './sjecanjeProcessor'
 import { posljednjiPozdravProcessor } from './posljednjiPozdravProcessor'
 import { zbogomProcessor } from './zbogomProcessor'
 
-const stopCondition: Parameters<typeof createSiteProcessor>[2] = (
-  items,
-  page
-) => items.length > 3 || page >= 1
+const stopCondition: Parameters<typeof createSiteProcessor>[2] = (_, page) =>
+  page >= 1
 
 export const osmrtnicaObitCategoryProcessor = createSiteProcessor(
   osmrtnicaProcessor,
