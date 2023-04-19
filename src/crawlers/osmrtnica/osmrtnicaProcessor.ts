@@ -43,9 +43,9 @@ const getRelative = async (
 export const osmrtnicaProcessor = async <E extends Element>(
   root: ElementHandle<E>
 ): Promise<IObituary | null> => {
-  const { firstname, prefix, surname, name_misc } = await getInnerText(
-    'div.title2'
-  )(root).then((names) => nameParser(names))
+  const nameString = await getInnerText('div.title2')(root)
+  if (!nameString) return null
+  const { firstname, prefix, surname, name_misc } = nameParser(nameString)
   const dates = await getDates(root)
   const currentDate = new Date(Date.now()).toISOString()
 
