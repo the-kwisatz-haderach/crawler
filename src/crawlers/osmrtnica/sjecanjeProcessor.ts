@@ -19,6 +19,11 @@ export const sjecanjeProcessor = async <E extends Element>(
   if (!firstname && !surname) return null
   if (!dates.length) return null
 
+  const long_text = await getLongText(root)
+  if (!long_text) return null
+  const image = await getElementProperty('img.okvir', 'src')(root)
+  if (!image) return null
+
   return createObituary({
     firstname,
     surname,
@@ -30,7 +35,7 @@ export const sjecanjeProcessor = async <E extends Element>(
     date_of_birth: dateParser(dates[0]),
     date_of_death: dateParser(dates[1]),
     type: await getType('in-memoriam')(root),
-    long_text: await getLongText(root),
-    image: await getElementProperty('img.okvir', 'src')(root)
+    long_text,
+    image
   })
 }

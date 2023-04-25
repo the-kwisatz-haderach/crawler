@@ -56,6 +56,7 @@ export const getLongTextExclLast = async (
           .map((t) => `<p>${t.replace(htmlTagsRegexp, '')}</p>`)
           .join('<br>')
           .replace(punctuationRegexp, '. ')
+          .replace(/&nbsp;+/g, ' ')
       )
   } catch {
     return ''
@@ -81,6 +82,7 @@ export const getLongText = async (
           .map((t) => `<p>${t.replace(htmlTagsRegexp, '')}</p>`)
           .join('<br>')
           .replace(punctuationRegexp, '. ')
+          .replace(/&nbsp;+/g, ' ')
       )
   } catch {
     return ''

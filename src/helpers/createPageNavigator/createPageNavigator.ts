@@ -4,7 +4,6 @@ export const createPageNavigator: PageNavigatorFactory = (pageNavigator) => {
   return async (page) => {
     try {
       const element = await pageNavigator(page)
-
       if (element) {
         await Promise.all([page.waitForNavigation(), element.click()])
         return { success: true }
@@ -22,7 +21,6 @@ export const createDetailPageNavigator: DetailPageNavigatorFactory = (
   elementSelector
 ) => {
   let elementIndex = 0
-
   return async (page) => {
     try {
       const elements = await elementSelector(page)
@@ -43,7 +41,7 @@ export const createDetailPageNavigator: DetailPageNavigatorFactory = (
     } catch (err) {
       console.error('Detail page navigator error: ', err)
       elementIndex = 0
-      await page.close()
+      // await page.close()
       return { success: false }
     }
   }

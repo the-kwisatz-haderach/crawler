@@ -12,11 +12,10 @@ const createSiteProcessor: SiteProcessorFactory = (
   return async (page) => {
     const allResults = []
     try {
-      for (
-        let pageIndex = 0;
-        !shouldStop(allResults, pageIndex) && pageIndex <= maxPages;
-        pageIndex += 1
-      ) {
+      for (let pageIndex = 0; pageIndex <= maxPages; pageIndex += 1) {
+        if (shouldStop(allResults, pageIndex)) {
+          break
+        }
         if (!detailedListingNavigator) {
           const results = await pageProcessor(page)
           allResults.push(...results)
@@ -32,18 +31,24 @@ const createSiteProcessor: SiteProcessorFactory = (
         if (success) {
           const results = await pageProcessor(page)
           allResults.push(...results)
-          await page.goBack({ waitUntil: 'domcontentloaded' })
+          await Promise.all([page.waitForNavigation(), page.goBack()])
           pageIndex -= 1
+          if (isLastElement) {
+            break
+          }
           continue
         }
-
         if (isLastElement) {
+          if (shouldStop(allResults, pageIndex + 1)) {
+            break
+          }
           const { success: nextSuccess } = await nextListingNavigator(page)
           if (nextSuccess) {
             continue
           }
+        } else {
+          break
         }
-
         return allResults
       }
     } catch (err) {

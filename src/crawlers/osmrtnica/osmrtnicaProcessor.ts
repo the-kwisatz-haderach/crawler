@@ -51,6 +51,10 @@ export const osmrtnicaProcessor = async <E extends Element>(
 
   if (!firstname && !surname) return null
   if (!dates.length) return null
+  const long_text = await getLongTextExclLast(root)
+  if (!long_text) return null
+  const image = await getElementProperty('img.okvir', 'src')(root)
+  if (!image) return null
 
   return createObituary({
     firstname,
@@ -64,7 +68,7 @@ export const osmrtnicaProcessor = async <E extends Element>(
     date_of_death: dateParser(dates[1]),
     relative: await getRelative(root),
     type: await getType('obituary')(root),
-    long_text: await getLongTextExclLast(root),
-    image: await getElementProperty('img.okvir', 'src')(root)
+    long_text,
+    image
   })
 }
