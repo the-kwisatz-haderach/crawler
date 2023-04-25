@@ -1,9 +1,7 @@
 import { IObituary } from './types'
 import createObituary from './createObituary'
 
-jest
-  .spyOn(global, 'Date')
-  .mockImplementation(() => ({ toISOString: () => 'someDate' } as any))
+jest.useFakeTimers('modern').setSystemTime(new Date('2020-01-01'))
 
 describe('createObituary', () => {
   it('creates an obituary with only required fields populated', () => {
@@ -21,7 +19,9 @@ describe('createObituary', () => {
       long_text: '',
       name_misc: '',
       relative: '',
-      is_crawled: true
+      is_crawled: true,
+      crawl_key: '',
+      appreciations: 0
     }
     expect(
       createObituary({
@@ -48,7 +48,9 @@ describe('createObituary', () => {
       long_text: 'Some description',
       name_misc: 'middlename',
       relative: 'relatives',
-      is_crawled: true
+      is_crawled: true,
+      crawl_key: '',
+      appreciations: 0
     }
     expect(
       createObituary({

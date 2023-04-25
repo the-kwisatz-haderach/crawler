@@ -9,7 +9,7 @@ export type ObituaryType =
 
 export type FaithType = 'christian' | 'muslim'
 
-export interface IObituary extends Record<string, unknown> {
+export interface IObituary {
   _id?: ObjectId
   storyId?: number
   firstname: string
@@ -31,4 +31,5 @@ export interface IObituary extends Record<string, unknown> {
   faith?: FaithType
   is_crawled: boolean
   appreciations: number
+  crawl_key: string
 }
