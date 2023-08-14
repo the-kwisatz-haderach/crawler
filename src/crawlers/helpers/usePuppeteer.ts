@@ -1,4 +1,4 @@
-import puppeteer, { Page } from 'puppeteer'
+import puppeteer, { Page } from 'puppeteer-core'
 
 const usePuppeteer = async (
   headless = true
@@ -18,7 +18,7 @@ const usePuppeteer = async (
     teardown: async () => {
       await page.close()
       await browser.close()
-    },
+    }
   }
 }
 

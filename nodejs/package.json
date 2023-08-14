@@ -1,0 +1,11 @@
+{
+  "name": "osmrtnice-crawl",
+  "version": "1.0.0",
+  "license": "MIT",
+  "scripts": {},
+  "dependencies": {
+    "chrome-aws-lambda": "^5.5.0",
+    "mongodb": "^4.13.0",
+    "puppeteer-core": "^5.5.0"
+  }
+}

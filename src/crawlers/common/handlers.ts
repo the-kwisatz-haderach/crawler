@@ -1,10 +1,10 @@
-import { ElementHandle } from 'puppeteer'
+import { ElementHandle } from 'puppeteer-core'
 import { ObituaryType } from '../../domain/types'
 import { getInnerText } from '../../helpers/getInnerText'
 
 export const getType =
   (defaultValue: ObituaryType) =>
-  async (root: ElementHandle<HTMLDivElement>): Promise<ObituaryType> => {
+  async <E extends Element>(root: ElementHandle<E>): Promise<ObituaryType> => {
     try {
       const type = (await getInnerText('div.tab')(root)).trim().toLowerCase()
       switch (true) {
@@ -14,6 +14,8 @@ export const getType =
           return 'last-greetings'
         case /zbogom/g.test(type):
           return 'gratitude-display'
+        case /zahval(e|a)/g.test(type):
+          return 'thank-you'
         default:
           return defaultValue
       }
@@ -22,8 +24,8 @@ export const getType =
     }
   }
 
-export const getDates = async (
-  root: ElementHandle<HTMLDivElement>
+export const getDates = async <E extends Element>(
+  root: ElementHandle<E>
 ): Promise<string[]> => {
   try {
     return await getInnerText('div.red-ispod-imena + div')(root).then((dates) =>
@@ -37,8 +39,8 @@ export const getDates = async (
 export const htmlTagsRegexp = /<(?:"[^"]*"['"]*|'[^']*'['"]*|[^'">])+>/g
 const punctuationRegexp = /[.,:](?=\S)/g
 
-export const getLongTextExclLast = async (
-  root: ElementHandle<HTMLDivElement>
+export const getLongTextExclLast = async <E extends Element>(
+  root: ElementHandle<E>
 ): Promise<string> => {
   try {
     return await root
@@ -63,8 +65,8 @@ export const getLongTextExclLast = async (
   }
 }
 
-export const getLongText = async (
-  root: ElementHandle<HTMLDivElement>
+export const getLongText = async <E extends Element>(
+  root: ElementHandle<E>
 ): Promise<string> => {
   try {
     return await root
