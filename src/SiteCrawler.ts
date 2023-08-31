@@ -1,11 +1,9 @@
-import { PuppeteerLaunchOptions } from 'puppeteer'
-import puppeteer from 'puppeteer-extra'
-import StealthPlugin from 'puppeteer-extra-plugin-stealth'
 import type { ErrorHandler, OutputHandler, PageProcessor } from './types'
 
-const { executablePath } = require('puppeteer')
+const puppeteer = require('puppeteer-core')
+const chromium = require('@sparticuz/chromium')
 
-puppeteer.use(StealthPlugin())
+chromium.setHeadlessMode = true
 
 interface SiteCrawlerArgs<U> {
   url: string
@@ -32,16 +30,19 @@ export default class SiteCrawler<U> {
     this.errorHandler = errorHandler ?? console.error
   }
 
-  async crawl(options?: PuppeteerLaunchOptions): Promise<void> {
+  async crawl(options?: any): Promise<void> {
     if (this.outputHandler) {
       const browser = await puppeteer.launch({
         ...options,
-        executablePath: executablePath()
+        args: chromium.args,
+        defaultViewport: chromium.defaultViewport,
+        executablePath: await chromium.executablePath,
+        headless: chromium.headless
       })
       try {
         const page = await browser.newPage()
         page.setDefaultNavigationTimeout(
-          Number.parseInt(process.env.PUPPETEER_NAVIGATION_TIMEOUT || '10000')
+          Number.parseInt(process.env.PUPPETEER_NAVIGATION_TIMEOUT || '30000')
         )
         await page.goto(this.url, {
           waitUntil: 'domcontentloaded'

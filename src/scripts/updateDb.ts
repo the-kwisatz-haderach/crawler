@@ -1,9 +1,10 @@
 import { MongoClient } from 'mongodb'
 import { IObituary } from '../domain/types'
 import { createCrawlKey } from '../domain/createObituary'
+import { mongoDbDb, mongoDbUri } from '../constants'
 
-const dbUri = process.env.MONGODB_URI || 'mongodb://localhost:27017'
-const dbName = process.env.MONGODB_DB || 'development'
+const dbUri = mongoDbUri || 'mongodb://localhost:27017'
+const dbName = mongoDbDb || 'development'
 
 export const updateDb = async () => {
   const client = new MongoClient(dbUri)

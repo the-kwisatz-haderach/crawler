@@ -5,42 +5,9 @@ import { getInnerText } from '../../helpers/getInnerText'
 import nameParser from '../../utils/nameParser'
 import { dateParser } from '../../utils/dateParser'
 import { createObituary } from '../../domain'
-import {
-  getDates,
-  getLongTextExclLast,
-  getType,
-  htmlTagsRegexp
-} from '../common/handlers'
+import { getDates, getLongTextExclLast, getType } from '../common/handlers'
 
-const getRelative = async <E extends Element>(
-  root: ElementHandle<E>
-): Promise<string> => {
-  try {
-    return await root
-      .$$('div:nth-child(8) > p')
-      .then(
-        async (elements = []) =>
-          await Promise.all(
-            elements
-              .slice(-1)
-              .map((element) => element?.evaluate((el) => el.innerHTML || ''))
-          )
-      )
-      .then((text) => {
-        return text
-          .join('')
-          .replace(htmlTagsRegexp, ' ')
-          .replace(/^.+?:/g, '')
-          .replace(/&nbsp;+/g, '')
-          .replace(/\.(?=\S)/g, '. ')
-          .trim()
-      })
-  } catch {
-    return ''
-  }
-}
-
-export const osmrtnicaProcessor = async <E extends Element>(
+export const zahvaleProcessor = async <E extends Element>(
   root: ElementHandle<E>
 ): Promise<IObituary | null> => {
   const nameString = await getInnerText('div.title2')(root)
@@ -66,8 +33,7 @@ export const osmrtnicaProcessor = async <E extends Element>(
     is_crawled: true,
     date_of_birth: dateParser(dates[0]),
     date_of_death: dateParser(dates[1]),
-    relative: await getRelative(root),
-    type: await getType('obituary')(root),
+    type: await getType('thank-you')(root),
     long_text,
     image
   })

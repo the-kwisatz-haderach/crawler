@@ -1,4 +1,4 @@
-import { ElementHandle } from 'puppeteer'
+import { ElementHandle } from 'puppeteer-core'
 
 const getElementProperty =
   (elementSelector: string, property: string) =>
@@ -8,7 +8,7 @@ const getElementProperty =
         (await root
           ?.$(elementSelector)
           .then(async (element) => await element?.getProperty(property))
-          .then(async (src) => await src?.jsonValue())) ??
+          .then(async (src) => (await src?.jsonValue()) as string)) ??
         (await Promise.resolve(''))
       )
     } catch {

@@ -1,11 +1,11 @@
 import { ObjectId } from 'mongodb'
-import { Richtext } from 'storyblok-js-client'
 
 export type ObituaryType =
   | 'in-memoriam'
   | 'obituary'
   | 'gratitude-display'
   | 'last-greetings'
+  | 'thank-you'
 
 export type FaithType = 'christian' | 'muslim'
 
@@ -20,7 +20,7 @@ export interface IObituary {
   date_of_death: string
   image?: string
   type: ObituaryType
-  long_text?: Richtext | string
+  long_text?: string
   relative?: string
   city?: string
   size?: 'regular' | 'large'
