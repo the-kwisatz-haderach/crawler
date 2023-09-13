@@ -25,8 +25,8 @@ const crawlers: Record<Event['type'], SiteCrawler<IObituary[]>> = {
   }),
   'posljednje-zbogom': new SiteCrawler({
     url: 'https://www.osmrtnica.ba/category/posljednje-zbogom/',
-    documentProcessor: processors.zbogomObitCategoryProcessor,
-    outputHandler: saveToDb('zbogom')
+    documentProcessor: processors.posljednjiPozdravObitCategoryProcessor,
+    outputHandler: saveToDb('posljednji-pozdrav')
   }),
   'posljednji-pozdrav': new SiteCrawler({
     url: 'https://www.osmrtnica.ba/category/posljednji-pozdrav/',
