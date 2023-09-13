@@ -35,6 +35,29 @@ export const updateDb = async () => {
   }
 }
 
+export const bulkUpdateCategory = async () => {
+  const client = new MongoClient(dbUri)
+  try {
+    await client.connect()
+    const db = await client.db(dbName)
+    console.log('Successfully connected to database server')
+
+    const obituariesCol = await db.collection<IObituary>('obituaries')
+    const bulkOp = obituariesCol.initializeUnorderedBulkOp()
+
+    bulkOp
+      .find({
+        type: 'gratitude-display'
+      })
+      .update({ $set: { type: 'last-greetings' } })
+
+    await bulkOp.execute()
+  } finally {
+    console.log('Closing database connection')
+    await client.close()
+  }
+}
+
 export const createIndex = async () => {
   const client = new MongoClient(dbUri)
   try {
