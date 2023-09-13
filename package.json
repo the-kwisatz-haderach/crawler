@@ -5,7 +5,7 @@
   "license": "MIT",
   "scripts": {
     "run": "npm run build && npm run start",
-    "clean": "rm crawler.zip || rm vendors.zip",
+    "clean": "rm index.js || rm crawler.zip || rm vendors.zip",
     "build": "npm run clean || node esbuild.config.mjs && npm run zip",
     "install-vendors": "cd ./nodejs && npm install && cd ..",
     "zip": "zip -r9 crawler.zip index.js",
