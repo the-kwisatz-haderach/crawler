@@ -32,4 +32,5 @@ export interface IObituary {
   is_crawled: boolean
   appreciations: number
   crawl_key: string
+  symbol_image?: string
 }

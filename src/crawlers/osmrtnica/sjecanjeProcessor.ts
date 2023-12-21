@@ -23,8 +23,13 @@ export const sjecanjeProcessor = async <E extends Element>(
   if (!long_text) return null
   const image = await getElementProperty('img.okvir', 'src')(root)
   if (!image) return null
+  const symbol_image = await getElementProperty(
+    'img[width="100"][height="100"]',
+    'src'
+  )(root)
 
   return createObituary({
+    symbol_image,
     firstname,
     surname,
     name_misc,

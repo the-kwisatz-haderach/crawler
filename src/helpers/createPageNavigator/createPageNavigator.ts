@@ -27,7 +27,7 @@ export const createDetailPageNavigator: DetailPageNavigatorFactory = (
       const currentElement = elements[elementIndex]
       if (currentElement) {
         const isClickable = await currentElement.evaluate(
-          (node) => node.childNodes.length > 0
+          (node: any) => node.childNodes.length > 0
         )
         if (isClickable) {
           await Promise.all([page.waitForNavigation(), currentElement.click()])

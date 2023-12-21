@@ -23,7 +23,9 @@ const getRelative = async <E extends Element>(
           await Promise.all(
             elements
               .slice(-1)
-              .map((element) => element?.evaluate((el) => el.innerHTML || ''))
+              .map((element) =>
+                element?.evaluate((el: any) => el.innerHTML || '')
+              )
           )
       )
       .then((text) => {
@@ -46,21 +48,20 @@ export const osmrtnicaProcessor = async <E extends Element>(
   const nameString = await getInnerText('div.title2')(root)
   if (!nameString) return null
   const { firstname, prefix, surname, name_misc } = nameParser(nameString)
+  if (!firstname && !surname) return null
   const dates = await getDates(root)
   const currentDate = new Date(Date.now()).toISOString()
-
-  if (!firstname && !surname) return null
   if (!dates.length) return null
   const long_text = await getLongTextExclLast(root)
   if (!long_text) return null
   const image = await getElementProperty('img.okvir', 'src')(root)
   if (!image) return null
+  const symbol_image = await getElementProperty(
+    'img[width="100"][height="100"]',
+    'src'
+  )(root)
 
   return createObituary({
-    firstname,
-    surname,
-    name_misc,
-    prefix,
     date_created: currentDate,
     date_updated: currentDate,
     is_crawled: true,
@@ -68,7 +69,12 @@ export const osmrtnicaProcessor = async <E extends Element>(
     date_of_death: dateParser(dates[1]),
     relative: await getRelative(root),
     type: await getType('obituary')(root),
+    firstname,
+    surname,
+    name_misc,
+    prefix,
     long_text,
+    symbol_image,
     image
   })
 }

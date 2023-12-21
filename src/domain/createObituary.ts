@@ -39,6 +39,7 @@ export default function createObituary(input: Partial<IObituary>): IObituary {
     city: '',
     additional_information: '',
     crawl_key: '',
+    symbol_image: input.symbol_image || '',
     ...input
   }
 

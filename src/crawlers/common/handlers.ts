@@ -50,7 +50,9 @@ export const getLongTextExclLast = async <E extends Element>(
           await Promise.all(
             elements
               .slice(0, -1)
-              .map((element) => element?.evaluate((el) => el.innerHTML || ''))
+              .map((element) =>
+                element?.evaluate((el: any) => el.innerHTML || '')
+              )
           )
       )
       .then((text) =>
@@ -75,7 +77,7 @@ export const getLongText = async <E extends Element>(
         async (elements = []) =>
           await Promise.all(
             elements.map((element) =>
-              element?.evaluate((el) => el.innerHTML || '')
+              element?.evaluate((el: any) => el.innerHTML || '')
             )
           )
       )
