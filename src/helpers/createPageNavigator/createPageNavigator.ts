@@ -30,7 +30,14 @@ export const createDetailPageNavigator: DetailPageNavigatorFactory = (
           (node: any) => node.childNodes.length > 0
         )
         if (isClickable) {
-          await Promise.all([page.waitForNavigation(), currentElement.click()])
+          try {
+            await Promise.all([
+              page.waitForNavigation(),
+              currentElement.click()
+            ])
+          } catch (err) {
+            console.error('detail page navigator error: ', err)
+          }
           elementIndex += 1
           return { success: true, isLastElement: false }
         }
