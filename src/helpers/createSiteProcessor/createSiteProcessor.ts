@@ -27,6 +27,16 @@ const createSiteProcessor: SiteProcessorFactory = (
           }
         }
 
+        const cookieDialog = await page.$('.fc-footer-buttons-container')
+        if (cookieDialog) {
+          const consentButton = await page.$(
+            '.fc-footer-buttons-container button:first-child'
+          )
+          if (consentButton) {
+            await consentButton.click()
+          }
+        }
+
         const { success, isLastElement } = await detailedListingNavigator(page)
         if (success) {
           const results = await pageProcessor(page)

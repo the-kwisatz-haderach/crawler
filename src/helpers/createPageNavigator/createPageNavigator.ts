@@ -32,8 +32,10 @@ export const createDetailPageNavigator: DetailPageNavigatorFactory = (
         if (isClickable) {
           try {
             const cookieDialog = await page.$('.fc-footer-buttons-container')
-            if (await cookieDialog?.isVisible()) {
-              const consentButton = await page.$('button::-p-text(Consent)')
+            if (cookieDialog) {
+              const consentButton = await page.$(
+                '.fc-footer-buttons-container button:first-child'
+              )
               if (consentButton) {
                 await consentButton.click()
               }

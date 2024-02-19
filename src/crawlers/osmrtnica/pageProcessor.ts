@@ -5,6 +5,15 @@ export const createObituaryCategoryProcessor: PageProcessorCreator =
   (obituaryProcessor) => async (page) => {
     const obituaries: IObituary[] = []
     try {
+      const cookieDialog = await page.$('.fc-footer-buttons-container')
+      if (cookieDialog) {
+        const consentButton = await page.$(
+          '.fc-footer-buttons-container button:first-child'
+        )
+        if (consentButton) {
+          await consentButton.click()
+        }
+      }
       const container = await page.$('div.size-vise')
       if (!container) {
         return obituaries
@@ -15,7 +24,7 @@ export const createObituaryCategoryProcessor: PageProcessorCreator =
       }
       return obituaries
     } catch (err) {
-      console.error(err)
+      console.error('obituary processor error: ', err)
       return obituaries
     }
   }
