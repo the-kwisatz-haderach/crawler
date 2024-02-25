@@ -15,7 +15,7 @@ export const createDbInserter = (
         console.log('Successfully connected to database server')
         await db
           .collection('obituaries')
-          .insertMany(obituaries, { ordered: false })
+          .insertMany(obituaries.reverse(), { ordered: false })
         console.log(
           `Inserted ${obituaries.length} entries from crawler ${crawler} into db`
         )
