@@ -39,6 +39,11 @@ export const createDetailPageNavigator: DetailPageNavigatorFactory = (
             ])
           } catch (err) {
             console.error('detail page navigator error: ', err)
+            await consent(page)
+            await Promise.all([
+              page.waitForNavigation(),
+              currentElement.click()
+            ])
           }
           elementIndex += 1
           return { success: true, isLastElement: false }
