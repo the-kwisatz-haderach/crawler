@@ -1,19 +1,12 @@
 import { IObituary } from '../../domain/types'
 import { PageProcessorCreator } from '../../types'
+import consent from './consent'
 
 export const createObituaryCategoryProcessor: PageProcessorCreator =
   (obituaryProcessor) => async (page) => {
     const obituaries: IObituary[] = []
     try {
-      const cookieDialog = await page.$('.fc-footer-buttons-container')
-      if (cookieDialog) {
-        const consentButton = await page.$(
-          '.fc-footer-buttons-container button:first-child'
-        )
-        if (consentButton) {
-          await consentButton.click()
-        }
-      }
+      await consent(page)
       const container = await page.$('div.size-vise')
       if (!container) {
         return obituaries

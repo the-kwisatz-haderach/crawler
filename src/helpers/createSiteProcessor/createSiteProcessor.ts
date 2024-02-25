@@ -1,3 +1,4 @@
+import consent from '../../crawlers/osmrtnica/consent'
 import { createObituaryCategoryProcessor } from '../../crawlers/osmrtnica/pageProcessor'
 import { SiteProcessorFactory } from '../../types'
 
@@ -27,16 +28,7 @@ const createSiteProcessor: SiteProcessorFactory = (
           }
         }
 
-        const cookieDialog = await page.$('.fc-footer-buttons-container')
-        if (cookieDialog) {
-          const consentButton = await page.$(
-            '.fc-footer-buttons-container button:first-child'
-          )
-          if (consentButton) {
-            await consentButton.click()
-          }
-        }
-
+        await consent(page)
         const { success, isLastElement } = await detailedListingNavigator(page)
         if (success) {
           const results = await pageProcessor(page)

@@ -1,3 +1,4 @@
+import consent from '../../crawlers/osmrtnica/consent'
 import { PageNavigatorFactory, DetailPageNavigatorFactory } from '../../types'
 
 export const createPageNavigator: PageNavigatorFactory = (pageNavigator) => {
@@ -31,15 +32,7 @@ export const createDetailPageNavigator: DetailPageNavigatorFactory = (
         )
         if (isClickable) {
           try {
-            const cookieDialog = await page.$('.fc-footer-buttons-container')
-            if (cookieDialog) {
-              const consentButton = await page.$(
-                '.fc-footer-buttons-container button:first-child'
-              )
-              if (consentButton) {
-                await consentButton.click()
-              }
-            }
+            await consent(page)
             await Promise.all([
               page.waitForNavigation(),
               currentElement.click()
