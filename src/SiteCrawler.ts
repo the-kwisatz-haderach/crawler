@@ -36,7 +36,7 @@ export default class SiteCrawler<U> {
         ...options,
         args: chromium.args,
         defaultViewport: chromium.defaultViewport,
-        executablePath: await chromium.executablePath,
+        executablePath: await chromium.executablePath(),
         headless: chromium.headless
       })
       try {
@@ -51,6 +51,7 @@ export default class SiteCrawler<U> {
         await page.close()
         await this.outputHandler(output)
       } catch (err) {
+        console.error('Root error:', err)
         this.errorHandler(err as Error)
       } finally {
         await browser.close()

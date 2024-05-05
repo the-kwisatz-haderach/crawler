@@ -8,7 +8,7 @@ resource "aws_lambda_function" "crawler" {
 
   runtime = "nodejs16.x"
   handler = "index.handler"
-  layers  = ["arn:aws:lambda:eu-north-1:764866452798:layer:chrome-aws-lambda:33"]
+  layers  = ["arn:aws:lambda:eu-north-1:764866452798:layer:chrome-aws-lambda:39"]
 
   source_code_hash = filebase64sha256("${path.module}/../crawler.zip")
 
